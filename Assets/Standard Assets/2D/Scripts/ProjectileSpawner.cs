@@ -23,14 +23,8 @@ public class ProjectileSpawner : MonoBehaviour {
 	void SpawnProjectile(bool Enemy){
 		if (CanAttack()) {
 			shotCooldown = rateOfFire;
-			Transform shotTransform = Instantiate (Projectile);
-			shotTransform.position = transform.position;
-
-			Projectile p = shotTransform.gameObject.GetComponent<Projectile>();
-			if(p != null){
-				p.setEnemy(Enemy);
-				p.setDirection (new Vector2(1, 0));
-			}
+			GameObject p = Instantiate (Projectile, transform.position, transform.rotation) as GameObject;
+			p.GetComponent<Projectile>().setEnemy(Enemy);
 		}
 	}
 

@@ -4,8 +4,8 @@ using System.Collections;
 public class Projectile : MonoBehaviour {
 	private int damage;
 	private bool enemy;
-	private Vector2 direction;
 	private Vector2 speed;
+	private Vector2 direction;
 	private Vector2 movement;
 
 	// Use this for initialization
@@ -18,16 +18,12 @@ public class Projectile : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (direction != null)
-			movement = new Vector2 (speed.x * direction.x, speed.y * direction.y);
+		direction = transform.forward.normalized;
+		movement = new Vector2 (speed.x * direction.x, speed.y * direction.y);
 	}
 
 	void FixedUpdate() {
-		GetComponent<Rigidbody2D>().velocity = movement;
-	}
-
-	public void setDirection(Vector2 d){
-		direction = d;
+		GetComponent<Rigidbody2D> ().velocity = transform.right * 10;
 	}
 
 	public bool isEnemy(){
