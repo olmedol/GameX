@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Projectile : MonoBehaviour {
 	private int damage;
-	private bool enemy;
+	private bool? enemy;
 	private Vector2 speed;
 	private Vector2 direction;
 	private Vector2 movement;
@@ -11,7 +11,6 @@ public class Projectile : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		damage = 1;
-		enemy = false;
 		Destroy (gameObject, 10);
 		speed = new Vector2 (10, 10);
 	}
@@ -26,7 +25,7 @@ public class Projectile : MonoBehaviour {
 		GetComponent<Rigidbody2D> ().velocity = transform.right * 10;
 	}
 
-	public bool isEnemy(){
+	public bool? isEnemy(){
 		return enemy;
 	}
 

@@ -2,9 +2,8 @@
 using System.Collections;
 
 public class EnemySpawn : MonoBehaviour {
-	public Transform enemy;
-	private int enemyCount;
-	private int enemyCap;
+	public Transform harassenemy, ramenemy;
+	private int enemyCount, enemyCap;
 	private float randomTime;
 
 	// Use this for initialization
@@ -25,8 +24,11 @@ public class EnemySpawn : MonoBehaviour {
 
 	void spawnEnemy() {
 		Vector2 playerPos = GameObject.Find ("Player").transform.position;
-		Vector2 spawnPos = new Vector2(playerPos.x + Random.Range (10, 20), playerPos.y + Random.Range (10, 20));
+		int randx = Random.value > 0.5 ? -1 : 1;
+		int randy = Random.value > 0.5 ? -1 : 1;
+		Vector2 spawnPos = new Vector2(playerPos.x + Random.Range (10, 20) * randx, playerPos.y + Random.Range (10, 20) * randy);
 		randomTime = Random.Range (5, 10);
+		Transform enemy = Random.value > 0.5 ? harassenemy : ramenemy;
 		Instantiate (enemy, spawnPos, GameObject.Find ("Player").transform.rotation);
 	}
 }

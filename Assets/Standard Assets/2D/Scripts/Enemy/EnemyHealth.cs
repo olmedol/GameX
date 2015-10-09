@@ -8,8 +8,6 @@ public class EnemyHealth : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		if (health == null)
-			health = 5;
 		invulnTime = 1f;
 		ramCooldown = 0f;
 	}
@@ -25,7 +23,7 @@ public class EnemyHealth : MonoBehaviour {
 	void OnTriggerStay2D(Collider2D otherCollider){
 		Projectile p = otherCollider.gameObject.GetComponent<Projectile>();
 		if (p != null) {
-			if(!p.isEnemy()){
+			if(p.isEnemy() == false){
 				Destroy (p.gameObject);
 				health -= p.damageInflicted();
 			}

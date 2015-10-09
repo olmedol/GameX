@@ -40,24 +40,22 @@ public class Player : MonoBehaviour {
 	}
 
 	void OnTriggerStay2D(Collider2D otherCollider){
+		if (damageCooldown > 0)
+			return;
 		Projectile p = otherCollider.gameObject.GetComponent<Projectile>();
 		if (p != null) {
-			if(p.isEnemy()){
-				Destroy (p.gameObject);
+			if(p.isEnemy() == true){
 				health -= p.damageInflicted();
+				Destroy (p.gameObject);
 				damageCooldown = invulnTime;
 			}
 		}
 	}
 
 	void OnCollisionStay2D(){
-		if (damageCooldown <= 0){
-			health -= 1;
-			damageCooldown = invulnTime;
-		}
-	}
-
-	public Vector2 Direction(){
-		return mousePos.normalized;
+		if (damageCooldown > 0)
+			return;
+		health -= 1;
+		damageCooldown = invulnTime;
 	}
 }
