@@ -13,7 +13,7 @@ public class Player : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
-		health = 3;
+		health = 5;
 		speed = new Vector2 (5, 5);
 		invulnTime = 1f;
 		damageCooldown = 0f;
@@ -47,15 +47,22 @@ public class Player : MonoBehaviour {
 			if(p.isEnemy() == true){
 				health -= p.damageInflicted();
 				Destroy (p.gameObject);
+				Component RemoveHealth = GameObject.Find("Main Camera").GetComponent("GUIManager");
+				RemoveHealth.SendMessage("AdjustCurrentHealth",-20);
 				damageCooldown = invulnTime;
 			}
 		}
 	}
 
 	void OnCollisionStay2D(){
+
 		if (damageCooldown > 0)
 			return;
 		health -= 1;
+
+		Component RemoveHealth = GameObject.Find("Main Camera").GetComponent("GUIManager");
+		RemoveHealth.SendMessage("AdjustCurrentHealth",-20);
+
 		damageCooldown = invulnTime;
 	}
 }

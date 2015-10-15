@@ -45,11 +45,11 @@ function LevelUpSystem()
 
 function OnGUI()
 {
-	GUI.Box(new Rect(5, 100, 40, 20), "XP");
-	GUI.Box(new Rect(5, 120, 40, 20), "Level");
+	GUI.Box(new Rect(5, 70, 40, 20), "XP");
+	GUI.Box(new Rect(5, 90, 40, 20), "Level");
 	
-	GUI.Box(new Rect(45, 100, 100, 20), currentXP + "/" + maxXP);
-	GUI.Box(new Rect(45, 120, 100, 20), level + "");
+	GUI.Box(new Rect(45, 70, 100, 20), currentXP + "/" + maxXP);
+	GUI.Box(new Rect(45, 90, 100, 20), level + "");
 	
 	
 	
