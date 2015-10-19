@@ -24,8 +24,8 @@ public class EnemyHealth : MonoBehaviour {
 		Projectile p = otherCollider.gameObject.GetComponent<Projectile>();
 		if (p != null) {
 			if(p.isEnemy() == false){
-				Destroy (p.gameObject);
 				health -= p.damageInflicted();
+				Destroy (p.gameObject);
 			}
 		}
 	}

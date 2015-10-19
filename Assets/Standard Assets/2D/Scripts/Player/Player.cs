@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Player : MonoBehaviour {
 	private int health; //Player's health
-	private Vector2 speed; //Player's top speed
+	private float speed; //Player's top speed
 	private Vector2 movement; //Player's current velocity
 	private float invulnTime; //Amount of time until the player can be hurt again after being damaged
 	private float damageCooldown; //Time until player can be damaged
@@ -14,14 +14,17 @@ public class Player : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		health = 5;
-		speed = new Vector2 (5, 5);
-		invulnTime = 1f;
-		damageCooldown = 0f;
+		speed = 5;
+		invulnTime = 1;
+		damageCooldown = 0;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		movement = new Vector2 (speed.x * Input.GetAxis ("Horizontal"), speed.y * Input.GetAxis ("Vertical"));;
+		movement = new Vector2(Input.GetAxis ("Horizontal"), Input.GetAxis ("Vertical"));
+		if (movement.magnitude > 1)
+			movement = movement.normalized;
+		movement *= speed;
 		playerPos =  Camera.main.WorldToScreenPoint(transform.localPosition);
 		mousePos = new Vector2 (Input.mousePosition.x - playerPos.x, Input.mousePosition.y - playerPos.y);
 		angle = Mathf.Atan2(mousePos.y, mousePos.x) * Mathf.Rad2Deg;
@@ -33,6 +36,8 @@ public class Player : MonoBehaviour {
 		if (damageCooldown > 0)
 			damageCooldown -= Time.deltaTime;
 
+		if (Input.GetButtonDown ("Fire1"))
+			GetComponent<ProjectileSpawner> ().SpawnProjectile (false);
 	}
 	
 	void FixedUpdate() {
@@ -42,7 +47,9 @@ public class Player : MonoBehaviour {
 	void OnTriggerStay2D(Collider2D otherCollider){
 		if (damageCooldown > 0)
 			return;
-		Projectile p = otherCollider.gameObject.GetComponent<Projectile>();
+		Projectile p = otherCollider.gameObject.GetComponent<Laser>();
+		if (p == null)
+			p = otherCollider.gameObject.GetComponent<Mine> ();
 		if (p != null) {
 			if(p.isEnemy() == true){
 				health -= p.damageInflicted();

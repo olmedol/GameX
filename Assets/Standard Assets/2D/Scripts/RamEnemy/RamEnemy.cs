@@ -2,20 +2,20 @@ using UnityEngine;
 using System.Collections;
 
 public class RamEnemy : MonoBehaviour {
-	private Vector2 speed;
+	private float speed;
 	private Vector2 movement;
 	private Transform target;
 
 	// Use this for initialization
 	void Start () {
-		speed = new Vector2 (6, 6);
+		speed = 4.5f;
 		target = GameObject.Find ("Player").transform;
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		Vector2 direction = (target.position - transform.position).normalized;
-		movement = new Vector2 (speed.x * direction.x, speed.y * direction.y);
+		movement = direction * speed;
 	}
 
 	void FixedUpdate() {

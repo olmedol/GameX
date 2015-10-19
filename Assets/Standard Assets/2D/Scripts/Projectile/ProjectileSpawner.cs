@@ -13,22 +13,16 @@ public class ProjectileSpawner : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if(gameObject.GetComponent<Player>() != null && Input.GetButtonDown ("Fire1"))
-			SpawnProjectile(false);
 		if (shotCooldown > 0)
 			shotCooldown -= Time.deltaTime;
 	}
 
 	public void SpawnProjectile(bool Enemy){
-		if (CanAttack()) {
+		if (shotCooldown <= 0f) {
 			shotCooldown = rateOfFire;
 			Projectile p = (Projectile) Instantiate (Projectile, transform.position, transform.rotation);
 			p.setEnemy(Enemy);
 		}
-	}
-
-	bool CanAttack(){
-		return shotCooldown <= 0f;
 	}
 
 }

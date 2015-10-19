@@ -5,7 +5,7 @@ public class Boundary : MonoBehaviour {
 	public float minY = 0.0f, minX = 0.0f, maxY = 0.0f, maxX = 0.0f;
 	// Use this for initialization
 	void Start () {
-	
+		
 	}
 	
 	// Update is called once per frame

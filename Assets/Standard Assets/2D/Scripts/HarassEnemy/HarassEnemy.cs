@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class HarassEnemy : MonoBehaviour {
-	private Vector2 speed;
+	private float speed;
 	private Vector2 movement;
 	private Transform target;
 	private float firingTime;
@@ -12,7 +12,7 @@ public class HarassEnemy : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		speed = new Vector2 (10, 10);
+		speed = 10;
 		target = GameObject.Find ("Player").transform;
 		firingTime = 0;
 		firingPeriod = 3.01f;
@@ -21,7 +21,7 @@ public class HarassEnemy : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		Vector2 direction = (target.position - transform.position).normalized;
-		movement = new Vector2 (speed.x * direction.x, speed.y * direction.y);
+		movement = direction * speed;
 		relativePos = new Vector2 (transform.position.x - target.position.x, transform.position.y - target.position.y);
 		angle = Mathf.Atan2(relativePos.y, relativePos.x) * Mathf.Rad2Deg + 180;
 		transform.localEulerAngles = new Vector3(0, 0, angle);
@@ -30,10 +30,10 @@ public class HarassEnemy : MonoBehaviour {
 			FireAtPlayer ();
 			firingTime -= Time.deltaTime;
 		} else if (Vector2.Distance (gameObject.transform.position, target.position) < 5) {
-			speed = new Vector2 (0.01f, 0.01f);
+			speed = 0.01f;
 			firingTime = firingPeriod;
 		} else
-			speed = new Vector2 (10, 10);
+			speed = 10;
 	}
 
 	void FixedUpdate() {
@@ -41,7 +41,7 @@ public class HarassEnemy : MonoBehaviour {
 	}
 
 	void FireAtPlayer(){
-		gameObject.GetComponent<ProjectileSpawner> ().SpawnProjectile (true);
+		GetComponent<ProjectileSpawner> ().SpawnProjectile (true);
 	}
 
 	public Vector2 Direction(){
