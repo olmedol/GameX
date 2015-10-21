@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class EnemySpawn : MonoBehaviour {
-	public Transform ram, harass, orbit, miner;
+	public Transform ram, harass, orbit, miner, sniper;
 	private int enemyCount, enemyCap;
 	private float randomTime;
 
@@ -28,7 +28,7 @@ public class EnemySpawn : MonoBehaviour {
 
 		Transform enemy = null;
 		int count = 1;
-		switch (Random.Range (1, 5)) {
+		switch (Random.Range (1, 6)) {
 			case 1:
 				enemy = ram;
 				break;
@@ -41,6 +41,9 @@ public class EnemySpawn : MonoBehaviour {
 				break;
 			case 4:
 				enemy = miner;
+				break;
+			case 5:
+				enemy = sniper;
 				break;
 			default:
 				print ("Spawn is out of range!");

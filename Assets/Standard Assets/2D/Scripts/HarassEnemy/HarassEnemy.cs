@@ -43,8 +43,5 @@ public class HarassEnemy : MonoBehaviour {
 	void FireAtPlayer(){
 		GetComponent<ProjectileSpawner> ().SpawnProjectile (true);
 	}
-
-	public Vector2 Direction(){
-		return movement.normalized;
-	}
+	
 }

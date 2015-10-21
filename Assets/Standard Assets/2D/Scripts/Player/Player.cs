@@ -72,4 +72,13 @@ public class Player : MonoBehaviour {
 
 		damageCooldown = invulnTime;
 	}
+
+	public void damage(int x){
+		if (damageCooldown > 0)
+			return;
+		health -= x;
+		damageCooldown = invulnTime;
+		Component RemoveHealth = GameObject.Find("Main Camera").GetComponent("GUIManager");
+		RemoveHealth.SendMessage("AdjustCurrentHealth",-20 * x);
+	}
 }

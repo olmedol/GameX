@@ -45,8 +45,5 @@ public class OrbitEnemy : MonoBehaviour {
 		if(!inRange)
 			GetComponent<Rigidbody2D>().velocity = movement;
 	}
-	
-	public Vector2 Direction(){
-		return movement.normalized;
-	}
+
 }

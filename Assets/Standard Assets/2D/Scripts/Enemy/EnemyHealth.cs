@@ -36,4 +36,8 @@ public class EnemyHealth : MonoBehaviour {
 			ramCooldown = invulnTime;
 		}
 	}
+
+	public void damage(int x){
+		health -= x;
+	}
 }
