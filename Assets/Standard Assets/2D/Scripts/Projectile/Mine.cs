@@ -13,5 +13,5 @@ public class Mine : Projectile {
 	void Update () {
 		
 	}
-	
+
 }

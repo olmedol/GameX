@@ -8,7 +8,7 @@ public class Laser : Projectile {
 	void Start () {
 		damage = 1;
 		Destroy (gameObject, 10);
-		speed = 10;
+		speed = 20;
 	}
 	
 	// Update is called once per frame
@@ -19,4 +19,5 @@ public class Laser : Projectile {
 	void FixedUpdate() {
 		GetComponent<Rigidbody2D> ().velocity = transform.right * speed;
 	}
+	
 }

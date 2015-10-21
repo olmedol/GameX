@@ -29,7 +29,7 @@ public class HarassEnemy : MonoBehaviour {
 		if (firingTime > 0) {
 			FireAtPlayer ();
 			firingTime -= Time.deltaTime;
-		} else if (Vector2.Distance (gameObject.transform.position, target.position) < 5) {
+		} else if (Vector2.Distance (gameObject.transform.position, target.position) < 10) {
 			speed = 0.01f;
 			firingTime = firingPeriod;
 		} else

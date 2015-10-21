@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Projectile : MonoBehaviour {
+public abstract class Projectile : MonoBehaviour {
 	protected int damage;
 	protected bool? enemy;
 
