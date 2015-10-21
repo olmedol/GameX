@@ -9,7 +9,8 @@ public class OrbitEnemy : MonoBehaviour {
 	private float orbitDistance;
 	private Vector3 relativeDistance;
 	private Vector3 direction;
-	
+
+
 	// Use this for initialization
 	void Start () {
 		speed = 10;

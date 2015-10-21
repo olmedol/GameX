@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Player : MonoBehaviour {
 	private int health; //Player's health
-	private float speed; //Player's top speed
+	public float speed; //Player's top speed
 	private Vector2 movement; //Player's current velocity
 	private float invulnTime; //Amount of time until the player can be hurt again after being damaged
 	private float damageCooldown; //Time until player can be damaged
