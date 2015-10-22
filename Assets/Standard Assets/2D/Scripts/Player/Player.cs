@@ -36,7 +36,7 @@ public class Player : MonoBehaviour {
 		if (damageCooldown > 0)
 			damageCooldown -= Time.deltaTime;
 
-		if (Input.GetButtonDown ("Fire1"))
+		if (Input.GetButton ("Fire1"))
 			GetComponent<ProjectileSpawner> ().SpawnProjectile (false);
 	}
 	

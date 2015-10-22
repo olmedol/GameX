@@ -19,10 +19,22 @@ public class ProjectileSpawner : MonoBehaviour {
 
 	public void SpawnProjectile(bool Enemy){
 		if (shotCooldown <= 0f) {
-			shotCooldown = rateOfFire;
 			Projectile p = (Projectile) Instantiate (Projectile, transform.position, transform.rotation);
 			p.setEnemy(Enemy);
+			shotCooldown = rateOfFire;
 		}
+	}
+
+	public void SpawnProjectile(bool Enemy, float angleOffset, int count){
+			if (shotCooldown <= 0f) {
+				float startAngle = Random.Range (0, 360);
+				for(int i = 0; i < count; i++){
+					Quaternion rotation = Quaternion.Euler (0, 0, (startAngle + angleOffset * i) % 360);
+					Projectile p = (Projectile) Instantiate (Projectile, transform.position, rotation);
+					p.setEnemy(Enemy);
+				}
+				shotCooldown = rateOfFire;
+			}
 	}
 
 }
