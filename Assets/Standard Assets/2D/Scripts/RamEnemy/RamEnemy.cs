@@ -21,8 +21,5 @@ public class RamEnemy : MonoBehaviour {
 	void FixedUpdate() {
 		GetComponent<Rigidbody2D>().velocity = movement;
 	}
-
-	public Vector2 Direction(){
-		return movement.normalized;
-	}
+	
 }

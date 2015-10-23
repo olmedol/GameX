@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class EnemySpawn : MonoBehaviour {
-	public Transform ram, harass, orbit, miner;
+	public Transform ram, harass, orbit, miner, sniper, triangle;
 	private int enemyCount, enemyCap;
 	private float randomTime;
 
@@ -28,7 +28,7 @@ public class EnemySpawn : MonoBehaviour {
 
 		Transform enemy = null;
 		int count = 1;
-		switch (Random.Range (1, 5)) {
+		switch (Random.Range (1, 7)) {
 			case 1:
 				enemy = ram;
 				break;
@@ -42,6 +42,12 @@ public class EnemySpawn : MonoBehaviour {
 			case 4:
 				enemy = miner;
 				break;
+			case 5:
+				enemy = sniper;
+				break;
+			case 6:
+				enemy = triangle;
+				break;
 			default:
 				print ("Spawn is out of range!");
 				break;
@@ -50,7 +56,7 @@ public class EnemySpawn : MonoBehaviour {
 		for (int i = 0; i < count; i++) {
 			int randx = Random.value > 0.5 ? -1 : 1;
 			int randy = Random.value > 0.5 ? -1 : 1;
-			Vector2 spawnPos = new Vector2(playerPos.x + Random.Range (10, 21) * randx, playerPos.y + Random.Range (10, 21) * randy);
+			Vector2 spawnPos = new Vector2(playerPos.x + Random.Range (15, 31) * randx, playerPos.y + Random.Range (15, 31) * randy);
 			Instantiate (enemy, spawnPos, GameObject.Find ("Player").transform.rotation);
 		}
 	}

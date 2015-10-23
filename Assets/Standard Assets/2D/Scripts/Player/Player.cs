@@ -36,7 +36,7 @@ public class Player : MonoBehaviour {
 		if (damageCooldown > 0)
 			damageCooldown -= Time.deltaTime;
 
-		if (Input.GetButtonDown ("Fire1"))
+		if (Input.GetButton ("Fire1"))
 			GetComponent<ProjectileSpawner> ().SpawnProjectile (false);
 	}
 	
@@ -71,5 +71,14 @@ public class Player : MonoBehaviour {
 		RemoveHealth.SendMessage("AdjustCurrentHealth",-20);
 
 		damageCooldown = invulnTime;
+	}
+
+	public void damage(int x){
+		if (damageCooldown > 0)
+			return;
+		health -= x;
+		damageCooldown = invulnTime;
+		Component RemoveHealth = GameObject.Find("Main Camera").GetComponent("GUIManager");
+		RemoveHealth.SendMessage("AdjustCurrentHealth",-20 * x);
 	}
 }

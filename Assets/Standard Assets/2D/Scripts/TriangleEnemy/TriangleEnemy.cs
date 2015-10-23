@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class MinerEnemy : MonoBehaviour {
+public class TriangleEnemy : MonoBehaviour {
 	private float minY, minX, maxY, maxX;
 	private float speed;
 	private Vector2 direction;
@@ -13,7 +13,7 @@ public class MinerEnemy : MonoBehaviour {
 		Boundary b = GameObject.Find ("Player").GetComponent<Boundary> ();
 		minY = b.minY; minX = b.minX; maxY = b.maxY; maxX = b.maxX;
 		direction = (Vector3.zero - transform.position).normalized;
-		speed = 2;
+		speed = 6;
 		wanderCooldown = 2;
 	}
 	
@@ -35,11 +35,10 @@ public class MinerEnemy : MonoBehaviour {
 		}
 		movement = direction * speed;
 		wanderCooldown -= Time.deltaTime;
-		GetComponent<ProjectileSpawner> ().SpawnProjectile (true);
+		GetComponent<ProjectileSpawner> ().SpawnProjectile (true, 120, 3);
 	}
 	
 	void FixedUpdate() {
 		GetComponent<Rigidbody2D>().velocity = movement;
 	}
-
 }
