@@ -13,7 +13,7 @@ public class Player : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
-		health = 5;
+		health = 500;
 		speed = 5;
 		invulnTime = 1;
 		damageCooldown = 0;
