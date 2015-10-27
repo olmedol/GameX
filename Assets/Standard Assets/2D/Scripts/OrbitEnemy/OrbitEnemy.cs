@@ -14,7 +14,7 @@ public class OrbitEnemy : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		speed = 10;
-		target = GameObject.Find ("Player").transform;
+		target = GameObject.FindWithTag ("Player").transform;
 		inRange = false;
 		orbitDistance = 10;
 		relativeDistance = transform.position - target.position;
@@ -23,27 +23,32 @@ public class OrbitEnemy : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (inRange) {
-			orbitDistance -= Time.deltaTime;
-		} else if (Vector2.Distance (gameObject.transform.position, target.position) < 10) {
-			inRange = true;
-		} else {
-			Vector2 direction = (target.position - transform.position).normalized;
-			movement = direction * speed;
+		if (PhotonNetwork.isMasterClient) {
+			if (inRange) {
+				orbitDistance -= Time.deltaTime;
+			} else if (Vector2.Distance (gameObject.transform.position, target.position) < 10) {
+				inRange = true;
+			} else {
+				Vector2 direction = (target.position - transform.position).normalized;
+				movement = direction * speed;
+			}
 		}
 	}
 
 	void LateUpdate() {
-		if (inRange) {
-			transform.position = target.position + relativeDistance;
-			transform.RotateAround (target.position, direction, 60 * Time.deltaTime);
-			relativeDistance = (transform.position - target.position).normalized * orbitDistance;
+		if (PhotonNetwork.isMasterClient) {
+			if (inRange) {
+				transform.position = target.position + relativeDistance;
+				transform.RotateAround (target.position, direction, 60 * Time.deltaTime);
+				relativeDistance = (transform.position - target.position).normalized * orbitDistance;
+			}
 		}
 	}
 
 	void FixedUpdate() {
-		if(!inRange)
-			GetComponent<Rigidbody2D>().velocity = movement;
+		if (PhotonNetwork.isMasterClient)
+			if(!inRange)
+				GetComponent<Rigidbody2D>().velocity = movement;
 	}
 
 }

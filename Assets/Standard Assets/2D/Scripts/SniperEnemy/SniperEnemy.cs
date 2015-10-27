@@ -17,7 +17,7 @@ public class SniperEnemy : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		speed = 6;
-		target = GameObject.Find ("Player").transform;
+		target = GameObject.FindWithTag ("Player").transform;
 		firingTime = 0;
 		firingPeriod = 5.51f;
 		firingCooldownTime = 3;
@@ -32,39 +32,42 @@ public class SniperEnemy : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		Vector2 direction = (target.position - transform.position).normalized;
-		float distance = Vector2.Distance (transform.position, target.position);
-		movement = direction * speed;
-		relativePos = new Vector2 (transform.position.x - target.position.x, transform.position.y - target.position.y);
-		angle = Mathf.Atan2 (relativePos.y, relativePos.x) * Mathf.Rad2Deg + 180;
-		transform.localEulerAngles = new Vector3 (0, 0, angle);
+		if (PhotonNetwork.isMasterClient) {
+			Vector2 direction = (target.position - transform.position).normalized;
+			float distance = Vector2.Distance (transform.position, target.position);
+			movement = direction * speed;
+			relativePos = new Vector2 (transform.position.x - target.position.x, transform.position.y - target.position.y);
+			angle = Mathf.Atan2 (relativePos.y, relativePos.x) * Mathf.Rad2Deg + 180;
+			transform.localEulerAngles = new Vector3 (0, 0, angle);
 		
-		if (firingCooldownTime > 0) {
-			if (firingCooldownTime < .5){
-				line.enabled = false;
-			}
-			if (distance < 30){
+			if (firingCooldownTime > 0) {
+				if (firingCooldownTime < .5) {
+					line.enabled = false;
+				}
+				if (distance < 30) {
+					speed = -6;
+					angle = Mathf.Atan2 (relativePos.y, relativePos.x) * Mathf.Rad2Deg;
+					transform.localEulerAngles = new Vector3 (0, 0, angle);
+				}
+				firingCooldownTime -= Time.deltaTime;
+			} else if (firingTime > 0) {
+				FireAtPlayer ();
+			} else if (distance < 20) {
 				speed = -6;
 				angle = Mathf.Atan2 (relativePos.y, relativePos.x) * Mathf.Rad2Deg;
 				transform.localEulerAngles = new Vector3 (0, 0, angle);
+			} else if (distance > 50) {
+				speed = 6;
+			} else {
+				speed = 0.01f;
+				firingTime = firingPeriod;
 			}
-			firingCooldownTime -= Time.deltaTime;
-		} else if (firingTime > 0) {
-			FireAtPlayer ();
-		} else if (distance < 20) {
-			speed = -6;
-			angle = Mathf.Atan2 (relativePos.y, relativePos.x) * Mathf.Rad2Deg;
-			transform.localEulerAngles = new Vector3 (0, 0, angle);
-		} else if (distance > 50) {
-			speed = 6;
-		} else {
-			speed = 0.01f;
-			firingTime = firingPeriod;
 		}
 	}
 	
 	void FixedUpdate() {
-		GetComponent<Rigidbody2D>().velocity = movement;
+		if (PhotonNetwork.isMasterClient)
+			GetComponent<Rigidbody2D>().velocity = movement;
 	}
 	
 	void FireAtPlayer(){

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class NetworkProjectile : Photon.MonoBehaviour {
+public class NetworkObject : Photon.MonoBehaviour {
 	private bool isAlive= true;
 	Vector3 position;
 	Quaternion rotation;

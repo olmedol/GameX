@@ -9,17 +9,20 @@ public class RamEnemy : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		speed = 4.5f;
-		target = GameObject.Find ("Player").transform;
+		target = GameObject.FindWithTag ("Player").transform;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		Vector2 direction = (target.position - transform.position).normalized;
-		movement = direction * speed;
+		if (PhotonNetwork.isMasterClient) {
+			Vector2 direction = (target.position - transform.position).normalized;
+			movement = direction * speed;
+		}
 	}
 
 	void FixedUpdate() {
-		GetComponent<Rigidbody2D>().velocity = movement;
+		if (PhotonNetwork.isMasterClient)
+			GetComponent<Rigidbody2D>().velocity = movement;
 	}
 	
 }

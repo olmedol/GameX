@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ProjectileSpawner : MonoBehaviour {
+public class ProjectileSpawner : Photon.MonoBehaviour {
 	public Projectile projectile;
 	public float rateOfFire;
 	private float shotCooldown;
@@ -21,21 +21,24 @@ public class ProjectileSpawner : MonoBehaviour {
 		if (shotCooldown <= 0f) {
 			//Projectile p = (Projectile) Instantiate (projectile, transform.position, transform.rotation);
 			GameObject p = PhotonNetwork.Instantiate ("Laser", transform.position, transform.rotation, 0);
+			//p.setEnemy(Enemy);
 			p.GetComponent<Projectile>().setEnemy(Enemy);
 			shotCooldown = rateOfFire;
 		}
 	}
 
 	public void SpawnProjectile(bool Enemy, float angleOffset, int count){
-//			if (shotCooldown <= 0f) {
-//				float startAngle = Random.Range (0, 360);
-//				for(int i = 0; i < count; i++){
-//					Quaternion rotation = Quaternion.Euler (0, 0, (startAngle + angleOffset * i) % 360);
-//					Projectile p = (Projectile) Instantiate (Projectile, transform.position, rotation);
-//					p.setEnemy(Enemy);
-//				}
-//				shotCooldown = rateOfFire;
-//			}
+			if (shotCooldown <= 0f) {
+				float startAngle = Random.Range (0, 360);
+				for(int i = 0; i < count; i++){
+					Quaternion rotation = Quaternion.Euler (0, 0, (startAngle + angleOffset * i) % 360);
+					//Projectile p = (Projectile) Instantiate (Projectile, transform.position, rotation);
+					GameObject p = PhotonNetwork.Instantiate (projectile.ToString (), transform.position, rotation, 0);
+					//p.setEnemy(Enemy);
+					p.GetComponent<Projectile>().setEnemy(Enemy);
+				}
+				shotCooldown = rateOfFire;
+			}
 	}
 
 }

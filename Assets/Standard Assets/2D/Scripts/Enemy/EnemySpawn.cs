@@ -1,13 +1,15 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class EnemySpawn : MonoBehaviour {
-	public Transform ram, harass, orbit, miner, sniper, triangle;
+public class EnemySpawn : Photon.MonoBehaviour {
 	private int enemyCount, enemyCap;
 	private float randomTime;
+	private float minY, minX, maxY, maxX;
 
 	// Use this for initialization
 	void Start () {
+		Boundary b = GetComponent<Boundary> ();
+		minY = b.minY; minX = b.minX; maxY = b.maxY; maxX = b.maxX;
 		enemyCount = 0;
 		enemyCap = 2;
 		randomTime = 0;
@@ -15,38 +17,39 @@ public class EnemySpawn : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		enemyCount = GameObject.FindGameObjectsWithTag ("Enemy").Length + GameObject.FindGameObjectsWithTag ("EnemySwarm").Length / 3;
-		if (randomTime > 0)
-			randomTime -= Time.deltaTime;
-		else if (enemyCount < enemyCap)
-			spawnEnemy();
+		if (PhotonNetwork.isMasterClient) {
+			enemyCount = GameObject.FindGameObjectsWithTag ("Enemy").Length + GameObject.FindGameObjectsWithTag ("EnemySwarm").Length / 3;
+			if (randomTime > 0)
+				randomTime -= Time.deltaTime;
+			else if (enemyCount < enemyCap)
+				spawnEnemy ();
+		}
 	}
 
 	void spawnEnemy() {
-		Vector2 playerPos = GameObject.Find ("Player").transform.position;
 		randomTime = Random.Range (5, 11);
 
-		Transform enemy = null;
+		string enemy = null;
 		int count = 1;
 		switch (Random.Range (1, 7)) {
 			case 1:
-				enemy = ram;
+				enemy = "RamEnemy";
 				break;
 			case 2:
-				enemy = harass;
+				enemy = "HarassEnemy";
 				break;
 			case 3:
-				enemy = orbit;
+				enemy = "OrbitEnemy";
 				count = 3;
 				break;
 			case 4:
-				enemy = miner;
+				enemy = "MinerEnemy";
 				break;
 			case 5:
-				enemy = sniper;
+				enemy = "SniperEnemy";
 				break;
 			case 6:
-				enemy = triangle;
+				enemy = "TriangleEnemy";
 				break;
 			default:
 				print ("Spawn is out of range!");
@@ -54,10 +57,13 @@ public class EnemySpawn : MonoBehaviour {
 		}
 
 		for (int i = 0; i < count; i++) {
-			int randx = Random.value > 0.5 ? -1 : 1;
-			int randy = Random.value > 0.5 ? -1 : 1;
-			Vector2 spawnPos = new Vector2(playerPos.x + Random.Range (15, 31) * randx, playerPos.y + Random.Range (15, 31) * randy);
-			Instantiate (enemy, spawnPos, GameObject.Find ("Player").transform.rotation);
+			int x = Random.value > 0.5 ? (int) minX : (int) maxX;
+			int y = Random.value > 0.5 ? (int) minY : (int) maxY;
+			int randx = x > 0 ? 1 : -1;
+			int randy = y > 0 ? 1 : -1;
+			Vector2 spawnPos = new Vector2(x + Random.Range (5, 11) * randx, y + Random.Range (5, 11) * randy);
+			//Instantiate (enemy, spawnPos, transform.rotation);
+			PhotonNetwork.Instantiate (enemy, spawnPos, transform.rotation, 0);
 		}
 	}
 }
