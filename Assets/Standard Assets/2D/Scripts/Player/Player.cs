@@ -53,7 +53,8 @@ public class Player : MonoBehaviour {
 		if (p != null) {
 			if(p.isEnemy() == true){
 				health -= p.damageInflicted();
-				Destroy (p.gameObject);
+				//Destroy (p.gameObject);
+				PhotonNetwork.Destroy (p.GetComponent<PhotonView>());;
 				Component RemoveHealth = GameObject.Find("Main Camera").GetComponent("GUIManager");
 				RemoveHealth.SendMessage("AdjustCurrentHealth",-20);
 				damageCooldown = invulnTime;

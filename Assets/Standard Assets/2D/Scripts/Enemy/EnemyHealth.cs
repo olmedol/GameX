@@ -25,7 +25,8 @@ public class EnemyHealth : MonoBehaviour {
 		if (p != null) {
 			if(p.isEnemy() == false){
 				health -= p.damageInflicted();
-				Destroy (p.gameObject);
+				//Destroy (p.gameObject);
+				PhotonNetwork.Destroy (p.GetComponent<PhotonView>());
 			}
 		}
 	}

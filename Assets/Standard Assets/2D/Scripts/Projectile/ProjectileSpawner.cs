@@ -33,7 +33,8 @@ public class ProjectileSpawner : Photon.MonoBehaviour {
 				for(int i = 0; i < count; i++){
 					Quaternion rotation = Quaternion.Euler (0, 0, (startAngle + angleOffset * i) % 360);
 					//Projectile p = (Projectile) Instantiate (Projectile, transform.position, rotation);
-					GameObject p = PhotonNetwork.Instantiate (projectile.ToString (), transform.position, rotation, 0);
+					GameObject p = PhotonNetwork.Instantiate ("Laser", transform.position, rotation, 0);
+					Debug.Log(projectile.ToString ());
 					//p.setEnemy(Enemy);
 					p.GetComponent<Projectile>().setEnemy(Enemy);
 				}
