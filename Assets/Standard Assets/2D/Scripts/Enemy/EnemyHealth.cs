@@ -15,7 +15,8 @@ public class EnemyHealth : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (health < 1)
-			Destroy (gameObject);
+			//Destroy (gameObject);
+			PhotonNetwork.Destroy (GetComponent<PhotonView>());
 		if (ramCooldown > 0)
 			ramCooldown -= Time.deltaTime;
 	}
