@@ -17,8 +17,7 @@ public class Laser : Projectile {
 	}
 	
 	void FixedUpdate() {
-		if (PhotonNetwork.isMasterClient)
-			GetComponent<Rigidbody2D> ().velocity = transform.right * speed;
+		GetComponent<Rigidbody2D> ().velocity = transform.right * speed;
 	}
 	
 }
