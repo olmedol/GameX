@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class ProjectileSpawner : MonoBehaviour {
-	public Projectile Projectile;
+	public Projectile projectile;
 	public float rateOfFire;
 	private float shotCooldown;
 
@@ -19,22 +19,23 @@ public class ProjectileSpawner : MonoBehaviour {
 
 	public void SpawnProjectile(bool Enemy){
 		if (shotCooldown <= 0f) {
-			Projectile p = (Projectile) Instantiate (Projectile, transform.position, transform.rotation);
-			p.setEnemy(Enemy);
+			//Projectile p = (Projectile) Instantiate (projectile, transform.position, transform.rotation);
+			GameObject p = PhotonNetwork.Instantiate ("Laser", transform.position, transform.rotation, 0);
+			p.GetComponent<Projectile>().setEnemy(Enemy);
 			shotCooldown = rateOfFire;
 		}
 	}
 
 	public void SpawnProjectile(bool Enemy, float angleOffset, int count){
-			if (shotCooldown <= 0f) {
-				float startAngle = Random.Range (0, 360);
-				for(int i = 0; i < count; i++){
-					Quaternion rotation = Quaternion.Euler (0, 0, (startAngle + angleOffset * i) % 360);
-					Projectile p = (Projectile) Instantiate (Projectile, transform.position, rotation);
-					p.setEnemy(Enemy);
-				}
-				shotCooldown = rateOfFire;
-			}
+//			if (shotCooldown <= 0f) {
+//				float startAngle = Random.Range (0, 360);
+//				for(int i = 0; i < count; i++){
+//					Quaternion rotation = Quaternion.Euler (0, 0, (startAngle + angleOffset * i) % 360);
+//					Projectile p = (Projectile) Instantiate (Projectile, transform.position, rotation);
+//					p.setEnemy(Enemy);
+//				}
+//				shotCooldown = rateOfFire;
+//			}
 	}
 
 }
