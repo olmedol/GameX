@@ -9,10 +9,15 @@ public class NetworkManager : MonoBehaviour {
 	public Transform spawnPoint;
 	// Use this for initialization
 	void Start () {
+		//comment out connectusingsettings line if you want offline. 
+		//PhotonNetwork.offlineMode = true;
+		//PhotonNetwork.CreateRoom (roomName);
 		PhotonNetwork.ConnectUsingSettings (VERSION);
 	}
 
 	void OnJoinedLobby(){
+
+		//Don't use these 2 lines if you wan't offline mode to work
 		RoomOptions roomOptions = new RoomOptions () { isVisible = false, maxPlayers = 4};
 		PhotonNetwork.JoinOrCreateRoom (roomName, roomOptions, TypedLobby.Default);
 
