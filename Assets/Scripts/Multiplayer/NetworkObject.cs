@@ -11,11 +11,7 @@ public class NetworkObject : Photon.MonoBehaviour {
 	
 	void Start () {
 		if (photonView.isMine) {
-			if(gameObject.GetComponent<Projectile>() != null)
-			   gameObject.GetComponent<Projectile> ().enabled = true;
-			else{
-
-			}
+			GetComponent<Projectile> ().enabled = true;
 			
 		} else {
 			StartCoroutine("Alive");
