@@ -14,6 +14,7 @@ public class NetworkPlayer : Photon.MonoBehaviour {
 		if (photonView.isMine) {
 			myCamera.SetActive (true);
 			GetComponent<Player> ().enabled = true;
+			gameObject.GetComponent<EnemySpawn>().enabled = true; 
 
 		} else {
 			StartCoroutine("Alive");
