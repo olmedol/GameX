@@ -18,7 +18,7 @@ public class NetworkManagerSingle : MonoBehaviour {
 			PhotonNetwork.ConnectUsingSettings (VERSION);
 		}
 		print(LoadOnClick.onlineStatus);
-		print ("I am currently online:"+ PhotonNetwork.offlineMode);
+		print ("I am currently online:"+ !PhotonNetwork.offlineMode);
 
 	}
 	
