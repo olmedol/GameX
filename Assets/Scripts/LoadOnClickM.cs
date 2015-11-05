@@ -1,13 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class LoadOnClick : MonoBehaviour {
+public class LoadOnClickM : MonoBehaviour {
 	
 	public GameObject loadingImage;
 	
 	public void LoadScene(int level)
 	{
-		bool multi = false;
+		bool multi = true;
 		loadingImage.SetActive(true);
 		Application.LoadLevel(level);
 	}
