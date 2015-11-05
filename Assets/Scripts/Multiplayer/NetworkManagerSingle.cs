@@ -7,25 +7,34 @@ public class NetworkManagerSingle : MonoBehaviour {
 	public string roomName = "VVR";
 	public string playerPrefabName = "Player";
 	public Transform spawnPoint;
+	private bool Online;
 	// Use this for initialization
 	void Start () {
 		//comment out connectusingsettings line if you want offline. 
-		PhotonNetwork.offlineMode = true;
-		PhotonNetwork.CreateRoom (roomName);
-		//PhotonNetwork.ConnectUsingSettings (VERSION);
+		if (!LoadOnClick.onlineStatus) {
+			PhotonNetwork.offlineMode = true;
+			PhotonNetwork.CreateRoom (roomName);
+		} else {
+			PhotonNetwork.ConnectUsingSettings (VERSION);
+		}
+		print(LoadOnClickM.onlineStatus);
+		print ("I am currently online:"+ PhotonNetwork.offlineMode);
+
 	}
 	
 	void OnJoinedLobby(){
 		
 		//Don't use these 2 lines if you wan't offline mode to work
-		//RoomOptions roomOptions = new RoomOptions () { isVisible = false, maxPlayers = 4};
-	//	PhotonNetwork.JoinOrCreateRoom (roomName, roomOptions, TypedLobby.Default);
+		if (LoadOnClick.onlineStatus) {
+			RoomOptions roomOptions = new RoomOptions () { isVisible = false, maxPlayers = 4};
+			PhotonNetwork.JoinOrCreateRoom (roomName, roomOptions, TypedLobby.Default);
+		}
 		
 	}
 	
 	
 	void OnJoinedRoom() { 
-		print(PhotonNetwork.isMasterClient);
+		//print(PhotonNetwork.isMasterClient);
 		
 		PhotonNetwork.Instantiate (playerPrefabName,
 		                           spawnPoint.position, 

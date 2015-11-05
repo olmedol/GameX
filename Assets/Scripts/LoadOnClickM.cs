@@ -4,10 +4,12 @@ using System.Collections;
 public class LoadOnClickM : MonoBehaviour {
 	
 	public GameObject loadingImage;
+	public static bool onlineStatus;
 	
-	public void LoadScene(int level)
+	public void LoadScene(int level, int onlineStatus2)
 	{
-		bool multi = true;
+
+		onlineStatus = true;
 		loadingImage.SetActive(true);
 		Application.LoadLevel(level);
 	}
