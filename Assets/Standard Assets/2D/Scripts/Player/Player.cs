@@ -13,7 +13,7 @@ public class Player : Photon.MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
-		health = 500;
+		health = 10;
 		maxspeed = 5;
 		invulnTime = 1;
 		damageCooldown = 0;
@@ -30,7 +30,7 @@ public class Player : Photon.MonoBehaviour {
 		transform.localEulerAngles = new Vector3(0, 0, angle);
 
 		if (health < 1)
-			Destroy (gameObject);
+			PhotonNetwork.Destroy (GetComponent<PhotonView>());
 
 		if (damageCooldown > 0)
 			damageCooldown -= Time.deltaTime;

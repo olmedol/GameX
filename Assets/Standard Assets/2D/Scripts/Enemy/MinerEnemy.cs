@@ -10,7 +10,7 @@ public class MinerEnemy : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
-		Boundary b = GameObject.FindWithTag ("Player").GetComponent<Boundary> ();
+		Boundary b = GameObject.FindWithTag ("Respawn").GetComponent<Boundary> ();
 		minY = b.minY; minX = b.minX; maxY = b.maxY; maxX = b.maxX;
 		direction = (Vector3.zero - transform.position).normalized;
 		speed = 2;

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class SniperEnemy : MonoBehaviour {
+public class SniperEnemy : Photon.MonoBehaviour {
 	private float speed;
 	private Vector2 movement;
 	private Transform target;
@@ -93,16 +93,22 @@ public class SniperEnemy : MonoBehaviour {
 			fireRaycast(finalTarget, transform.position);
 			finalTarget = Vector3.zero;
 			firingCooldownTime = firingCooldownPeriod;
+			GameObject[] targets = GameObject.FindGameObjectsWithTag ("Player");
+			target = targets[Random.Range (0, targets.Length)].transform;
 		}
 	}
 
 	void fireRaycast(Vector3 targetpos, Vector3 pos){
 		RaycastHit2D[] hits = Physics2D.RaycastAll (pos, (targetpos - pos));
-		foreach(RaycastHit2D hit in hits)
+		foreach(RaycastHit2D hit in hits){
 			if (hit.collider != null) {
 				Player p = hit.collider.gameObject.GetComponent<Player>();
 				if (p)
 					p.damage(damage);
+				PhotonView e = hit.collider.gameObject.GetComponent<PhotonView>();
+				if(e && e.gameObject != gameObject)
+					e.RPC ("damage", PhotonTargets.AllBufferedViaServer, damage);
 			}
+		}
 	}
 }

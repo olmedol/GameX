@@ -1,48 +1,58 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class AsteroidSpawn : Photon.MonoBehaviour {
-	private int asteroidCount, asteroidCap;
+public class EnemySpawn : Photon.MonoBehaviour {
+	private int enemyCount, enemyCap;
 	private float randomTime;
 	private float minY, minX, maxY, maxX;
-
 
 	// Use this for initialization
 	void Start () {
 		Boundary b = GetComponent<Boundary> ();
 		minY = b.minY; minX = b.minX; maxY = b.maxY; maxX = b.maxX;
-		asteroidCount = 0;
-		asteroidCap = 15;
+		enemyCount = 0;
+		enemyCap = 2;
 		randomTime = 0;
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		if (PhotonNetwork.isMasterClient) {
-			asteroidCount = GameObject.FindGameObjectsWithTag ("Asteroid").Length;
+			enemyCount = GameObject.FindGameObjectsWithTag ("Enemy").Length + GameObject.FindGameObjectsWithTag ("EnemySwarm").Length / 3;
 			if (randomTime > 0)
 				randomTime -= Time.deltaTime;
-			else if (asteroidCount < asteroidCap)
-				spawnAsteroid ();
+			else if (enemyCount < enemyCap)
+				spawnEnemy ();
 		}
 	}
 
-	void spawnAsteroid() {
+	void spawnEnemy() {
 		randomTime = Random.Range (5, 11);
-		string asteroid = null;
-		int count = 0;
-		switch (Random.Range (1, 4)) {
+
+		string enemy = null;
+		int count = 1;
+		switch (Random.Range (1, 7)) {
 			case 1:
-				asteroid = "Asteroid1";
+				enemy = "RamEnemy";
 				break;
 			case 2:
-				asteroid = "Asteroid2";
+				enemy = "HarassEnemy";
 				break;
 			case 3:
-				asteroid = "Asteroid3";
+				enemy = "OrbitEnemy";
+				count = 3;
 				break;
 			case 4:
-				asteroid = "Asteroid4";
+				enemy = "MinerEnemy";
+				break;
+			case 5:
+				enemy = "SniperEnemy";
+				break;
+			case 6:
+				enemy = "TriangleEnemy";
+				break;
+			default:
+				print ("Spawn is out of range!");
 				break;
 		}
 
@@ -52,9 +62,7 @@ public class AsteroidSpawn : Photon.MonoBehaviour {
 			int randx = x > 0 ? 1 : -1;
 			int randy = y > 0 ? 1 : -1;
 			Vector2 spawnPos = new Vector2(x + Random.Range (5, 11) * randx, y + Random.Range (5, 11) * randy);
-			//Instantiate (enemy, spawnPos, transform.rotation);
-			PhotonNetwork.Instantiate (asteroid, spawnPos, transform.rotation, 0);
-
+			PhotonNetwork.InstantiateSceneObject (enemy, spawnPos, transform.rotation, 0, null);
+		}
 	}
-}
 }

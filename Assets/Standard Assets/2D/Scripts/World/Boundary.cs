@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class Boundary : MonoBehaviour {
-	public float minY = 0.0f, minX = 0.0f, maxY = 0.0f, maxX = 0.0f;
+	public readonly float minY = -23, minX = -35, maxY = 23, maxX = 35;
 	// Use this for initialization
 	void Start () {
 		
