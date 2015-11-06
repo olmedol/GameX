@@ -100,15 +100,13 @@ public class SniperEnemy : Photon.MonoBehaviour {
 
 	void fireRaycast(Vector3 targetpos, Vector3 pos){
 		RaycastHit2D[] hits = Physics2D.RaycastAll (pos, (targetpos - pos));
-		foreach(RaycastHit2D hit in hits){
+		foreach(RaycastHit2D hit in hits)
 			if (hit.collider != null) {
-				Player p = hit.collider.gameObject.GetComponent<Player>();
-				if (p)
-					p.damage(damage);
-				PhotonView e = hit.collider.gameObject.GetComponent<PhotonView>();
-				if(e && e.gameObject != gameObject)
-					e.RPC ("damage", PhotonTargets.AllBufferedViaServer, damage);
+				GameObject g = hit.collider.gameObject;
+				if (g.tag == "Player")
+					g.GetComponent<Player>().damage(damage);
+				else if(g != gameObject && g.tag != "Asteroid")
+					g.GetComponent<PhotonView>().RPC ("damage", PhotonTargets.AllBufferedViaServer, damage);
 			}
-		}
 	}
 }

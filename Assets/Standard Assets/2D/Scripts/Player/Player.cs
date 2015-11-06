@@ -42,45 +42,43 @@ public class Player : Photon.MonoBehaviour {
 	void FixedUpdate() {
 		Rigidbody2D r = GetComponent<Rigidbody2D> ();
 		r.AddForce (movement * 20);
-		if (r.velocity.magnitude > maxspeed)
-			r.velocity = r.velocity.normalized * maxspeed;
+		r.velocity = Vector2.ClampMagnitude (r.velocity, maxspeed);
 	}
 
 	void OnTriggerStay2D(Collider2D otherCollider){
 		if (damageCooldown > 0)
 			return;
-		Projectile p = otherCollider.gameObject.GetComponent<Laser>();
-		if (p == null)
-			p = otherCollider.gameObject.GetComponent<Mine> ();
-		if (p != null) {
-			if(p.isEnemy() == true){
-				health -= p.damageInflicted();
-				PhotonNetwork.Destroy (p.GetComponent<PhotonView>());;
-				Component RemoveHealth = GameObject.Find("Main Camera").GetComponent("GUIManager");
-				RemoveHealth.SendMessage("AdjustCurrentHealth",-20);
-				damageCooldown = invulnTime;
-			}
+		Projectile p = otherCollider.gameObject.GetComponent<Projectile> ();
+		if(p != null && p.isEnemy() == true){
+			health -= p.damageInflicted();
+
+			Component RemoveHealth = GameObject.Find("Main Camera").GetComponent("GUIManager");
+			RemoveHealth.SendMessage("AdjustCurrentHealth",-10);
+
+			PhotonNetwork.Destroy (p.GetComponent<PhotonView>());
+			damageCooldown = invulnTime;
 		}
 	}
 
-	void OnCollisionStay2D(){
+	void OnCollisionStay2D(Collision2D otherCollision){
+		if (damageCooldown <= 0 && otherCollision.gameObject.tag != "Player") {
+			health -= 1;
 
-		if (damageCooldown > 0)
-			return;
-		health -= 1;
+			Component RemoveHealth = GameObject.Find ("Main Camera").GetComponent ("GUIManager");
+			RemoveHealth.SendMessage ("AdjustCurrentHealth", -10);
 
-		Component RemoveHealth = GameObject.Find("Main Camera").GetComponent("GUIManager");
-		RemoveHealth.SendMessage("AdjustCurrentHealth",-20);
-
-		damageCooldown = invulnTime;
+			damageCooldown = invulnTime;
+		}
 	}
 
 	public void damage(int x){
-		if (damageCooldown > 0)
-			return;
-		health -= x;
-		damageCooldown = invulnTime;
-		Component RemoveHealth = GameObject.Find("Main Camera").GetComponent("GUIManager");
-		RemoveHealth.SendMessage("AdjustCurrentHealth",-20 * x);
+		if (damageCooldown <= 0) {
+			health -= x;
+
+			Component RemoveHealth = GameObject.Find ("Main Camera").GetComponent ("GUIManager");
+			RemoveHealth.SendMessage ("AdjustCurrentHealth", -10 * x);
+
+			damageCooldown = invulnTime;
+		}
 	}
 }
