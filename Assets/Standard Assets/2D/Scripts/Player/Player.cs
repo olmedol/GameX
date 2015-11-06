@@ -1,9 +1,9 @@
 using UnityEngine;
 using System.Collections;
 
-public class Player : MonoBehaviour {
+public class Player : Photon.MonoBehaviour {
 	private int health; //Player's health
-	public float speed; //Player's top speed
+	private float maxspeed; //Player's top speed
 	private Vector2 movement; //Player's current velocity
 	private float invulnTime; //Amount of time until the player can be hurt again after being damaged
 	private float damageCooldown; //Time until player can be damaged
@@ -14,7 +14,7 @@ public class Player : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		health = 500;
-		speed = 5;
+		maxspeed = 5;
 		invulnTime = 1;
 		damageCooldown = 0;
 	}
@@ -24,7 +24,6 @@ public class Player : MonoBehaviour {
 		movement = new Vector2(Input.GetAxis ("Horizontal"), Input.GetAxis ("Vertical"));
 		if (movement.magnitude > 1)
 			movement = movement.normalized;
-		movement *= speed;
 		playerPos =  Camera.main.WorldToScreenPoint(transform.localPosition);
 		mousePos = new Vector2 (Input.mousePosition.x - playerPos.x, Input.mousePosition.y - playerPos.y);
 		angle = Mathf.Atan2(mousePos.y, mousePos.x) * Mathf.Rad2Deg;
@@ -41,7 +40,10 @@ public class Player : MonoBehaviour {
 	}
 	
 	void FixedUpdate() {
-		GetComponent<Rigidbody2D>().velocity = movement;
+		Rigidbody2D r = GetComponent<Rigidbody2D> ();
+		r.AddForce (movement * 20);
+		if (r.velocity.magnitude > maxspeed)
+			r.velocity = r.velocity.normalized * maxspeed;
 	}
 
 	void OnTriggerStay2D(Collider2D otherCollider){
@@ -53,7 +55,6 @@ public class Player : MonoBehaviour {
 		if (p != null) {
 			if(p.isEnemy() == true){
 				health -= p.damageInflicted();
-				//Destroy (p.gameObject);
 				PhotonNetwork.Destroy (p.GetComponent<PhotonView>());;
 				Component RemoveHealth = GameObject.Find("Main Camera").GetComponent("GUIManager");
 				RemoveHealth.SendMessage("AdjustCurrentHealth",-20);

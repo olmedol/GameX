@@ -9,7 +9,8 @@ public class RamEnemy : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		speed = 4.5f;
-		target = GameObject.FindWithTag ("Player").transform;
+		GameObject[] targets = GameObject.FindGameObjectsWithTag ("Player");
+		target = targets[Random.Range (0, targets.Length)].transform;
 	}
 	
 	// Update is called once per frame

@@ -13,7 +13,7 @@ public class TriangleEnemy : MonoBehaviour {
 		Boundary b = GameObject.FindWithTag ("Player").GetComponent<Boundary> ();
 		minY = b.minY; minX = b.minX; maxY = b.maxY; maxX = b.maxX;
 		direction = (Vector3.zero - transform.position).normalized;
-		speed = 6;
+		speed = 4;
 		wanderCooldown = 2;
 	}
 	

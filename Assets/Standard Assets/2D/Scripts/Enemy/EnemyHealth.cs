@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class EnemyHealth : MonoBehaviour {
+public class EnemyHealth : Photon.MonoBehaviour {
 	public int health;
 	private float invulnTime;
 	private float ramCooldown;
@@ -22,10 +22,12 @@ public class EnemyHealth : MonoBehaviour {
 	}
 
 	void OnTriggerStay2D(Collider2D otherCollider){
-		Projectile p = otherCollider.gameObject.GetComponent<Projectile>();
-		if (p != null) {
-			if(p.isEnemy() == false){
-				health -= p.damageInflicted();
+		Projectile p = otherCollider.gameObject.GetComponent<Projectile> ();
+		PhotonView v = otherCollider.gameObject.GetComponent<PhotonView> ();
+		if (p != null && v != null) {
+			if(p.isEnemy() == false && v.isMine){
+				int damage = p.damageInflicted ();
+				GetComponent<PhotonView>().RPC ("damage", PhotonTargets.AllBufferedViaServer, damage);
 				//Destroy (p.gameObject);
 				PhotonNetwork.Destroy (p.GetComponent<PhotonView>());
 			}
@@ -33,13 +35,15 @@ public class EnemyHealth : MonoBehaviour {
 	}
 
 	void OnCollisionStay2D(Collision2D otherCollision){
-		if (ramCooldown <= 0 && otherCollision.gameObject.tag == "Player"){
-			health -= 1;
+		PhotonView v = otherCollision.gameObject.GetComponent<PhotonView> ();
+		if (ramCooldown <= 0 && otherCollision.gameObject.tag == "Player" && v.isMine){
+			GetComponent<PhotonView>().RPC ("damage", PhotonTargets.AllBufferedViaServer, 1);
 			ramCooldown = invulnTime;
 		}
 	}
 
-	public void damage(int x){
+	[PunRPC]
+	void damage(int x){
 		health -= x;
 	}
 }

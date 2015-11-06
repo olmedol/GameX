@@ -13,7 +13,8 @@ public class HarassEnemy : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		speed = 10;
-		target = GameObject.FindWithTag ("Player").transform;
+		GameObject[] targets = GameObject.FindGameObjectsWithTag ("Player");
+		target = targets[Random.Range (0, targets.Length)].transform;
 		firingTime = 0;
 		firingPeriod = 3.01f;
 	}

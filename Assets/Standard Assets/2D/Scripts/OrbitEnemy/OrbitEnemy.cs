@@ -14,7 +14,8 @@ public class OrbitEnemy : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		speed = 10;
-		target = GameObject.FindWithTag ("Player").transform;
+		GameObject[] targets = GameObject.FindGameObjectsWithTag ("Player");
+		target = targets[Random.Range (0, targets.Length)].transform;
 		inRange = false;
 		orbitDistance = 10;
 		relativeDistance = transform.position - target.position;
