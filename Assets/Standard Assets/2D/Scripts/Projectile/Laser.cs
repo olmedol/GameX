@@ -3,9 +3,11 @@ using System.Collections;
 
 public class Laser : Projectile {
 	private float speed;
-	
 	// Use this for initialization
 	void Start () {
+
+		AudioSource audio = GetComponent<AudioSource> ();
+		audio.Play ();
 		damage = 1;
 		Destroy (gameObject, 10);
 		speed = 20;

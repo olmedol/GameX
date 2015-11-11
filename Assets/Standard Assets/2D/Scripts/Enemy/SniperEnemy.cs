@@ -13,9 +13,17 @@ public class SniperEnemy : Photon.MonoBehaviour {
 	public Material redmaterial;
 	private Vector3 finalTarget;
 	private int damage;
+
+
+	AudioSource warmup;
+	AudioSource shot;
 	
 	// Use this for initialization
 	void Start () {
+		AudioSource[] audio = GetComponents<AudioSource> ();
+		warmup = audio [0];
+		shot = audio [1];
+
 		speed = 6;
 		GameObject[] targets = GameObject.FindGameObjectsWithTag ("Player");
 		target = targets[Random.Range (0, targets.Length)].transform;
@@ -73,9 +81,9 @@ public class SniperEnemy : Photon.MonoBehaviour {
 	
 	void FireAtPlayer(){
 		firingTime -= Time.deltaTime;
-
 		line.SetPosition (0, transform.position);
 		if (line.enabled == false) {
+			warmup.PlayDelayed(1);
 			line.SetPosition (1, target.position);
 			line.material = greenmaterial;
 			line.SetColors(Color.green, Color.green);
@@ -84,6 +92,7 @@ public class SniperEnemy : Photon.MonoBehaviour {
 		if (firingTime > .5)
 			line.SetPosition (1, target.position);
 		else if(firingTime > 0){
+			shot.Play ();
 			if(finalTarget == Vector3.zero)
 				finalTarget = target.position;
 			line.material = redmaterial;
