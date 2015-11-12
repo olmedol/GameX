@@ -10,7 +10,7 @@ public class EnemyHealth : Photon.MonoBehaviour {
 	void Start () {
 		invulnTime = 1f;
 		ramCooldown = 0f;
-		gameObject.AddComponent<GainXP>();
+		//gameObject.AddComponent<GainXP>();
 	}
 	
 	// Update is called once per frame
