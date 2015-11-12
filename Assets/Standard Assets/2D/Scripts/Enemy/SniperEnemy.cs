@@ -83,7 +83,7 @@ public class SniperEnemy : Photon.MonoBehaviour {
 		firingTime -= Time.deltaTime;
 		line.SetPosition (0, transform.position);
 		if (line.enabled == false) {
-			warmup.PlayDelayed(1);
+			warmup.PlayDelayed(1.2F);
 			line.SetPosition (1, target.position);
 			line.material = greenmaterial;
 			line.SetColors(Color.green, Color.green);
@@ -92,12 +92,12 @@ public class SniperEnemy : Photon.MonoBehaviour {
 		if (firingTime > .5)
 			line.SetPosition (1, target.position);
 		else if(firingTime > 0){
-			shot.Play ();
 			if(finalTarget == Vector3.zero)
 				finalTarget = target.position;
 			line.material = redmaterial;
 			line.SetColors(Color.red, Color.red);
 		} else {
+			shot.Play ();
 			line.SetPosition(1, (finalTarget - transform.position) * 8 + transform.position);
 			fireRaycast(finalTarget, transform.position);
 			finalTarget = Vector3.zero;
