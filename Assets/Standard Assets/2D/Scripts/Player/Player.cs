@@ -10,6 +10,8 @@ public class Player : Photon.MonoBehaviour {
 	private Vector2 playerPos; //Position of the player
 	private Vector2 mousePos; //Position of the mouse
 	private float angle; //Angle of the Player's sprite
+	public bool dmg1; //Damage Upgrade active/inactive
+	public bool dmg2; //Damage Upgrade active/inactive
 	
 	// Use this for initialization
 	void Start () {
@@ -17,6 +19,8 @@ public class Player : Photon.MonoBehaviour {
 		maxspeed = 5;
 		invulnTime = 1;
 		damageCooldown = 0;
+		dmg1 = false;
+		dmg2 = false;
 	}
 	
 	// Update is called once per frame
@@ -82,9 +86,5 @@ public class Player : Photon.MonoBehaviour {
 		}
 	}
 
-	public void speedUp(float amt){
-		
-		maxspeed += amt;
-		
-	}
+
 }

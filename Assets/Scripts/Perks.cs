@@ -16,13 +16,7 @@ public class Perks : MonoBehaviour {
 		perkPoints += x;
 
 	}
-
-	void addSpeedMult(){
-
-		transform.parent.gameObject.SendMessage("addSpeedMult", 0.5);
-
-
-	}
+	
 	/*
 	void addSpeedMult(){
 
