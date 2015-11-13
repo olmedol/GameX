@@ -3,6 +3,7 @@ using System.Collections;
 
 public class Perks : MonoBehaviour {
 
+
 	public int perkPoints = 0;
 	public float speedMult = 1;
 	public float damageMult = 1;
@@ -13,6 +14,13 @@ public class Perks : MonoBehaviour {
 	void addPerkPoints(int x){
 
 		perkPoints += x;
+
+	}
+
+	void addSpeedMult(){
+
+		transform.parent.gameObject.SendMessage("addSpeedMult", 0.5);
+
 
 	}
 	/*

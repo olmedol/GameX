@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Player : Photon.MonoBehaviour {
 	private int health; //Player's health
-	private float maxspeed; //Player's top speed
+	public float maxspeed; //Player's top speed
 	private Vector2 movement; //Player's current velocity
 	private float invulnTime; //Amount of time until the player can be hurt again after being damaged
 	private float damageCooldown; //Time until player can be damaged
@@ -80,5 +80,11 @@ public class Player : Photon.MonoBehaviour {
 
 			damageCooldown = invulnTime;
 		}
+	}
+
+	public void speedUp(float amt){
+		
+		maxspeed += amt;
+		
 	}
 }
