@@ -12,6 +12,9 @@ public class Player : Photon.MonoBehaviour {
 	private float angle; //Angle of the Player's sprite
 	public bool dmg1; //Damage Upgrade active/inactive
 	public bool dmg2; //Damage Upgrade active/inactive
+	public bool laser1; //Double-laser upgrade active/inactive
+	public bool laser2; //Side-laser upgrade active/inactive
+	public bool laser3; //More lasers upgrade active/inactive
 	
 	// Use this for initialization
 	void Start () {
@@ -21,6 +24,9 @@ public class Player : Photon.MonoBehaviour {
 		damageCooldown = 0;
 		dmg1 = false;
 		dmg2 = false;
+		laser1 = false;
+		laser2 = false;
+		laser3 = false;
 	}
 	
 	// Update is called once per frame
@@ -38,7 +44,7 @@ public class Player : Photon.MonoBehaviour {
 			damageCooldown -= Time.deltaTime;
 
 		if (Input.GetButton ("Fire1"))
-			GetComponent<ProjectileSpawner> ().SpawnProjectile (false);
+			GetComponent<ProjectileSpawner>().SpawnProjectile(laser1, laser2, laser3);
 	}
 	
 	void FixedUpdate() {
