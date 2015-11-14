@@ -13,7 +13,7 @@ public class OrbitEnemy : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		speed = 10;
+		speed = 15;
 		GameObject[] targets = GameObject.FindGameObjectsWithTag ("Player");
 		target = targets[Random.Range (0, targets.Length)].transform;
 		inRange = false;
