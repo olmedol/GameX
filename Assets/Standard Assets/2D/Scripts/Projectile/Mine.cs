@@ -5,7 +5,7 @@ public class Mine : Projectile {
 
 	// Use this for initialization
 	void Start () {
-		Destroy (gameObject, 20);
+		Destroy (gameObject, 120);
 		damage = 1;
 	}
 	

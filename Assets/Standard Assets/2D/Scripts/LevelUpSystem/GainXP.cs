@@ -10,8 +10,15 @@ public class GainXP : MonoBehaviour {
 
 	
 	void  Start (){	
-		levelUpScript = GameObject.Find("Main Camera").GetComponent<LevelUpSystem>();
-		kills = GameObject.Find("Main Camera").GetComponent<killCounter>();
+		levelUpScript = GameObject.FindWithTag("MainCamera").GetComponent<LevelUpSystem>();
+		kills = GameObject.FindWithTag("MainCamera").GetComponent<killCounter>();
+	}
+
+	void Update(){
+		if (kills == null)
+			kills = GameObject.FindWithTag("MainCamera").GetComponent<killCounter>();
+		if (levelUpScript == null)
+			levelUpScript = GameObject.FindWithTag("MainCamera").GetComponent<LevelUpSystem>();
 	}
 	
 	void  OnCollisionEnter2D (){

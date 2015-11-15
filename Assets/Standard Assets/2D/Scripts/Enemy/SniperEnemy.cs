@@ -42,6 +42,16 @@ public class SniperEnemy : Photon.MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (PhotonNetwork.isMasterClient) {
+			if(target == null){
+				GameObject[] targets = GameObject.FindGameObjectsWithTag ("Player");
+				target = targets[Random.Range (0, targets.Length)].transform;
+				firingCooldownTime = firingTime;
+				firingTime = 0;
+				finalTarget = Vector3.zero;
+				line.enabled = false;
+				return;
+			}
+
 			Vector2 direction = (target.position - transform.position).normalized;
 			float distance = Vector2.Distance (transform.position, target.position);
 			movement = direction * speed;
@@ -75,8 +85,11 @@ public class SniperEnemy : Photon.MonoBehaviour {
 	}
 	
 	void FixedUpdate() {
-		if (PhotonNetwork.isMasterClient)
-			GetComponent<Rigidbody2D>().velocity = movement;
+		if (PhotonNetwork.isMasterClient) {
+			if(target == null)
+				return;
+			GetComponent<Rigidbody2D> ().velocity = movement;
+		}
 	}
 	
 	void FireAtPlayer(){
@@ -112,10 +125,11 @@ public class SniperEnemy : Photon.MonoBehaviour {
 		foreach(RaycastHit2D hit in hits)
 			if (hit.collider != null) {
 				GameObject g = hit.collider.gameObject;
-				if (g.tag == "Player")
+				PhotonView v = g.GetComponent<PhotonView>();
+				if (g.tag == "Player" && v.isMine)
 					g.GetComponent<Player>().damage(damage);
-				else if(g != gameObject && g.tag != "Asteroid")
-					g.GetComponent<PhotonView>().RPC ("damage", PhotonTargets.AllBufferedViaServer, damage);
+				else if(g != gameObject && (g.tag == "Enemy" || g.tag == "EnemySwarm") && v.isMine)
+					v.RPC ("damage", PhotonTargets.AllBufferedViaServer, damage);
 			}
 	}
 }

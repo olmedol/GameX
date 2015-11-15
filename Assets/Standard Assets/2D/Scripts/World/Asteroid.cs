@@ -20,7 +20,7 @@ public class Asteroid : Photon.MonoBehaviour {
 		if (PhotonNetwork.isMasterClient) {
 			Vector2 direction = new Vector2(Random.value, Random.value).normalized;
 			movement = direction * speed;
-			transform.Rotate(direction);
+			transform.Rotate(Vector3.forward);
 			Vector2 p = transform.position;
 			if(transform.position.x < minX || transform.position.x > maxX || transform.position.y < minY || transform.position.y > maxY)
 				timeToDestroy -= Time.deltaTime;

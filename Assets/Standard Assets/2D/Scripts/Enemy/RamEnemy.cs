@@ -17,6 +17,12 @@ public class RamEnemy : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (PhotonNetwork.isMasterClient) {
+			if(target == null){
+				GameObject[] targets = GameObject.FindGameObjectsWithTag ("Player");
+				target = targets[Random.Range (0, targets.Length)].transform;
+				return;
+			}
+
 			direction = (target.position - transform.position).normalized;
 			aimcooldown -= Time.deltaTime;
 		}
@@ -24,6 +30,8 @@ public class RamEnemy : MonoBehaviour {
 
 	void FixedUpdate() {
 		if (PhotonNetwork.isMasterClient) {
+			if(target == null)
+				return;
 			Rigidbody2D r = GetComponent<Rigidbody2D> ();
 			if(Vector2.Distance (transform.position, target.position) > 20){
 				if(aimcooldown > 0)

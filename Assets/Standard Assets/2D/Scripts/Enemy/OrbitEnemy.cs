@@ -25,9 +25,17 @@ public class OrbitEnemy : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (PhotonNetwork.isMasterClient) {
+			if(target == null){
+				inRange = false;
+				orbitDistance = 10;
+				GameObject[] targets = GameObject.FindGameObjectsWithTag ("Player");
+				target = targets[Random.Range (0, targets.Length)].transform;
+				return;
+			}
+
 			if (inRange) {
 				orbitDistance -= Time.deltaTime;
-			} else if (Vector2.Distance (gameObject.transform.position, target.position) < 10) {
+			} else if (Vector2.Distance (transform.position, target.position) < 10) {
 				inRange = true;
 			} else {
 				Vector2 direction = (target.position - transform.position).normalized;
@@ -38,6 +46,8 @@ public class OrbitEnemy : MonoBehaviour {
 
 	void LateUpdate() {
 		if (PhotonNetwork.isMasterClient) {
+			if(target == null)
+				return;
 			if (inRange) {
 				transform.position = target.position + relativeDistance;
 				transform.RotateAround (target.position, direction, 60 * Time.deltaTime);
@@ -47,9 +57,12 @@ public class OrbitEnemy : MonoBehaviour {
 	}
 
 	void FixedUpdate() {
-		if (PhotonNetwork.isMasterClient)
-			if(!inRange)
-				GetComponent<Rigidbody2D>().velocity = movement;
+		if (PhotonNetwork.isMasterClient) {
+			if(target == null)
+				return;
+			if (!inRange)
+				GetComponent<Rigidbody2D> ().velocity = movement;
+		}
 	}
 
 }
