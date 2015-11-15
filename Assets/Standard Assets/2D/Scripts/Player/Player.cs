@@ -1,8 +1,13 @@
+
+
+
 using UnityEngine;
 using System.Collections;
 
 public class Player : Photon.MonoBehaviour {
 	private int health; //Player's health
+	private int maxHealth; //Player's health
+
 	public float maxspeed; //Player's top speed
 	private Vector2 direction; //Player's current direction
 	private float invulnTime; //Amount of time until the player can be hurt again after being damaged
@@ -20,6 +25,8 @@ public class Player : Photon.MonoBehaviour {
 	void Start () {
 		health = 10;
 		maxspeed = 5;
+		maxHealth = 10;
+
 		invulnTime = 1;
 		damageCooldown = 0;
 		dmg1 = false;
@@ -36,13 +43,13 @@ public class Player : Photon.MonoBehaviour {
 		mousePos = new Vector2 (Input.mousePosition.x - playerPos.x, Input.mousePosition.y - playerPos.y);
 		angle = Mathf.Atan2(mousePos.y, mousePos.x) * Mathf.Rad2Deg;
 		transform.localEulerAngles = new Vector3(0, 0, angle);
-
+		
 		if (health < 1)
 			PhotonNetwork.Destroy (GetComponent<PhotonView>());
-
+		
 		if (damageCooldown > 0)
 			damageCooldown -= Time.deltaTime;
-
+		
 		if (Input.GetButton ("Fire1"))
 			GetComponent<ProjectileSpawner>().SpawnProjectile(laser1, laser2, laser3);
 	}
@@ -52,43 +59,61 @@ public class Player : Photon.MonoBehaviour {
 		r.AddForce (direction * 20);
 		r.velocity = Vector2.ClampMagnitude (r.velocity, maxspeed);
 	}
-
+	
 	void OnTriggerStay2D(Collider2D otherCollider){
 		if (damageCooldown > 0)
 			return;
 		Projectile p = otherCollider.gameObject.GetComponent<Projectile> ();
 		if(p != null && p.isEnemy() == true){
 			health -= p.damageInflicted();
-
+			
 			Component RemoveHealth = GameObject.Find("Main Camera").GetComponent("GUIManager");
 			RemoveHealth.SendMessage("AdjustCurrentHealth",-10);
-
+			
 			PhotonNetwork.Destroy (p.GetComponent<PhotonView>());
 			damageCooldown = invulnTime;
 		}
 	}
-
+	
 	void OnCollisionStay2D(Collision2D otherCollision){
 		if (damageCooldown <= 0 && otherCollision.gameObject.tag != "Player") {
 			health -= 1;
-
+			
 			Component RemoveHealth = GameObject.Find ("Main Camera").GetComponent ("GUIManager");
 			RemoveHealth.SendMessage ("AdjustCurrentHealth", -10);
-
+			
 			damageCooldown = invulnTime;
 		}
 	}
-
+	
 	public void damage(int x){
 		if (damageCooldown <= 0) {
 			health -= x;
-
+			
 			Component RemoveHealth = GameObject.Find ("Main Camera").GetComponent ("GUIManager");
 			RemoveHealth.SendMessage ("AdjustCurrentHealth", -10 * x);
-
+			
 			damageCooldown = invulnTime;
 		}
 	}
-
-
+	public void increaseCap(int x){
+		maxHealth += x;
+		health = maxHealth;
+	}
+	public void heal(int x){
+		if (health + x >= maxHealth) {
+			health = maxHealth;
+			
+		} else {
+			health+=x;
+		}
+		
+		Component AddHealth = GameObject.Find ("Main Camera").GetComponent ("GUIManager");
+		AddHealth.SendMessage ("AdjustCurrentHealth", 10 * x);
+		
+	}
+	
 }
+
+
+
