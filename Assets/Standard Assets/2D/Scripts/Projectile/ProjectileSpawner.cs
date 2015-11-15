@@ -48,10 +48,9 @@ public class ProjectileSpawner : Photon.MonoBehaviour {
 			}
 				if(laser1){
 
-			
-				GameObject q = PhotonNetwork.Instantiate (projectile, transform.position, transform.rotation, 0);
+				GameObject q = PhotonNetwork.Instantiate (projectile, transform.position+transform.up*0.20f, transform.rotation, 0);
 				q.GetComponent<Projectile>().setEnemy(false);
-				GameObject p = PhotonNetwork.Instantiate (projectile, transform.position, transform.rotation, 0);
+				GameObject p = PhotonNetwork.Instantiate (projectile, transform.position+transform.up*-0.20f, transform.rotation, 0);
 				p.GetComponent<Projectile> ().setEnemy (false);
 
 			}
