@@ -20,6 +20,9 @@ public class Player : Photon.MonoBehaviour {
 	public bool laser1; //Double-laser upgrade active/inactive
 	public bool laser2; //Side-laser upgrade active/inactive
 	public bool laser3; //More lasers upgrade active/inactive
+	public bool shield; //shield upgrade active/inactive
+	private float shieldCooldown; //Time until shield regenerates
+	private Transform shield_object;
 	
 	// Use this for initialization
 	void Start () {
@@ -34,6 +37,11 @@ public class Player : Photon.MonoBehaviour {
 		laser1 = false;
 		laser2 = false;
 		laser3 = false;
+		shield = false;
+		shieldCooldown = 0;
+		foreach (Transform child in transform)
+			if (child.tag == "Shield")
+				shield_object = child;
 	}
 	
 	// Update is called once per frame
