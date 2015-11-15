@@ -6,12 +6,9 @@ public class GainXP : MonoBehaviour {
 	
 	
 	private LevelUpSystem levelUpScript;
-	private killCounter kills;
-
 	
 	void  Start (){	
 		levelUpScript = GameObject.Find("Main Camera").GetComponent<LevelUpSystem>();
-		kills = GameObject.Find("Main Camera").GetComponent<killCounter>();
 	}
 	
 	void  OnCollisionEnter2D (){
@@ -21,8 +18,7 @@ public class GainXP : MonoBehaviour {
 	
 	void  OnDestroy (){
 		levelUpScript.currentXP += 10;
-
-		kills.incScore ();
+		
 		//print("Script was destroyed");
 		
 	}
