@@ -33,19 +33,17 @@ public class LevelUpSystem : MonoBehaviour {
 	
 	void  LevelUp (){
 		currentXP = 0;
-		maxXP = maxXP + 50;
+		maxXP = maxXP + 20;
 		level++;
 		
-		
-		
+
 		leveledUp = true;
 		timeTillNotShowLevelUp = Time.time + timeToShowLevelUp;
 		
 		GUIManager GUIManager = GameObject.Find("Main Camera").GetComponent<GUIManager>();
-		GUIManager.maxHealth = GUIManager.maxHealth + 50;
+		GUIManager.maxHealth = GUIManager.maxHealth + 20;
+		transform.parent.gameObject.SendMessage ("increaseCap", 2);
 		GUIManager.currentHealth = GUIManager.maxHealth;
-		GUIManager.maxMana = GUIManager.maxMana + 20;
-		GUIManager.maxStamina = GUIManager.maxStamina + 20;
 		//Perks perks = player.GetComponent<Perks>();
 		transform.parent.gameObject.SendMessage("addPerkPoints", 1);
 	}

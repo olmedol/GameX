@@ -3,6 +3,8 @@ using System.Collections;
 
 public class Player : Photon.MonoBehaviour {
 	private int health; //Player's health
+	private int maxHealth; //Player's health
+
 	public float maxspeed; //Player's top speed
 	private Vector2 movement; //Player's current velocity
 	private float invulnTime; //Amount of time until the player can be hurt again after being damaged
@@ -16,6 +18,7 @@ public class Player : Photon.MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		health = 10;
+		maxHealth = 10;
 		maxspeed = 5;
 		invulnTime = 1;
 		damageCooldown = 0;
@@ -25,6 +28,7 @@ public class Player : Photon.MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+
 		movement = new Vector2(Input.GetAxis ("Horizontal"), Input.GetAxis ("Vertical"));
 		if (movement.magnitude > 1)
 			movement = movement.normalized;
@@ -76,14 +80,32 @@ public class Player : Photon.MonoBehaviour {
 	}
 
 	public void damage(int x){
+
 		if (damageCooldown <= 0) {
 			health -= x;
 
 			Component RemoveHealth = GameObject.Find ("Main Camera").GetComponent ("GUIManager");
 			RemoveHealth.SendMessage ("AdjustCurrentHealth", -10 * x);
 
+
 			damageCooldown = invulnTime;
 		}
+	}
+	public void increaseCap(int x){
+		maxHealth += x;
+		health = maxHealth;
+	}
+	public void heal(int x){
+		if (health + x >= maxHealth) {
+			health = maxHealth;
+			
+		} else {
+			health+=x;
+		}
+		
+		Component AddHealth = GameObject.Find ("Main Camera").GetComponent ("GUIManager");
+		AddHealth.SendMessage ("AdjustCurrentHealth", 10 * x);
+		
 	}
 
 
