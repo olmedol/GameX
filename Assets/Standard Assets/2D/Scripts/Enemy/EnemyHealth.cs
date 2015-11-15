@@ -33,8 +33,10 @@ public class EnemyHealth : Photon.MonoBehaviour {
 
 	void OnCollisionStay2D(Collision2D otherCollision){
 		GameObject g = otherCollision.gameObject;
+		if(g.GetComponent<RamEnemy>() != null)
+			return;
 		PhotonView v = g.GetComponent<PhotonView> ();
-		if (ramCooldown <= 0 && v.isMine && (g.tag == "Player" || g.tag == "Asteroid")){
+		if (g != null && v != null && ramCooldown <= 0 && v.isMine && (g.tag == "Player" || g.tag == "Asteroid")){
 			GetComponent<PhotonView>().RPC ("damage", PhotonTargets.AllBufferedViaServer, 1);
 			ramCooldown = invulnTime;
 		}

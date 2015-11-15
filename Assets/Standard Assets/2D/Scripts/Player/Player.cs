@@ -4,7 +4,7 @@ using System.Collections;
 public class Player : Photon.MonoBehaviour {
 	private int health; //Player's health
 	public float maxspeed; //Player's top speed
-	private Vector2 movement; //Player's current velocity
+	private Vector2 direction; //Player's current direction
 	private float invulnTime; //Amount of time until the player can be hurt again after being damaged
 	private float damageCooldown; //Time until player can be damaged
 	private Vector2 playerPos; //Position of the player
@@ -12,6 +12,9 @@ public class Player : Photon.MonoBehaviour {
 	private float angle; //Angle of the Player's sprite
 	public bool dmg1; //Damage Upgrade active/inactive
 	public bool dmg2; //Damage Upgrade active/inactive
+	public bool laser1; //Double-laser upgrade active/inactive
+	public bool laser2; //Side-laser upgrade active/inactive
+	public bool laser3; //More lasers upgrade active/inactive
 	
 	// Use this for initialization
 	void Start () {
@@ -21,13 +24,14 @@ public class Player : Photon.MonoBehaviour {
 		damageCooldown = 0;
 		dmg1 = false;
 		dmg2 = false;
+		laser1 = false;
+		laser2 = false;
+		laser3 = false;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		movement = new Vector2(Input.GetAxis ("Horizontal"), Input.GetAxis ("Vertical"));
-		if (movement.magnitude > 1)
-			movement = movement.normalized;
+		direction = Vector2.ClampMagnitude (new Vector2(Input.GetAxis ("Horizontal"), Input.GetAxis ("Vertical")), 1);
 		playerPos =  Camera.main.WorldToScreenPoint(transform.localPosition);
 		mousePos = new Vector2 (Input.mousePosition.x - playerPos.x, Input.mousePosition.y - playerPos.y);
 		angle = Mathf.Atan2(mousePos.y, mousePos.x) * Mathf.Rad2Deg;
@@ -40,12 +44,12 @@ public class Player : Photon.MonoBehaviour {
 			damageCooldown -= Time.deltaTime;
 
 		if (Input.GetButton ("Fire1"))
-			GetComponent<ProjectileSpawner> ().SpawnProjectile (false);
+			GetComponent<ProjectileSpawner>().SpawnProjectile(laser1, laser2, laser3);
 	}
 	
 	void FixedUpdate() {
 		Rigidbody2D r = GetComponent<Rigidbody2D> ();
-		r.AddForce (movement * 20);
+		r.AddForce (direction * 20);
 		r.velocity = Vector2.ClampMagnitude (r.velocity, maxspeed);
 	}
 
