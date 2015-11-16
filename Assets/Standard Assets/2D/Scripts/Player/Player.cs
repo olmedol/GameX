@@ -66,7 +66,7 @@ public class Player : Photon.MonoBehaviour {
 		if (shieldCooldown <= 0 && !shield_object.gameObject.activeSelf && shield)
 			shield_object.gameObject.SetActive (true);
 		
-		if (Input.GetButton ("Fire1"))
+		if (Input.GetButton ("Fire1") && Time.timeScale == 1)
 			GetComponent<ProjectileSpawner>().SpawnProjectile(laser1, laser2, laser3);
 	}
 	

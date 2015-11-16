@@ -9,8 +9,9 @@ public class LoadOnClick : MonoBehaviour {
 	public void LoadScene(int level)
 	{
 		onlineStatus = (level!=0);
-		loadingImage.SetActive(true);
-		Application.LoadLevel(1);
+		//loadingImage.SetActive(true);
+		Time.timeScale = 1;
+		Application.LoadLevel(level);
 	}
 
 }
