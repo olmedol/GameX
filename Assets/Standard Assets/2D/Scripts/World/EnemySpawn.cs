@@ -6,6 +6,7 @@ public class EnemySpawn : Photon.MonoBehaviour {
 	private float randomTime;
 	private float minY, minX, maxY, maxX;
 	private float difficultyTimer;
+	private int bossCount;
 
 	// Use this for initialization
 	void Start () {
@@ -27,6 +28,16 @@ public class EnemySpawn : Photon.MonoBehaviour {
 				randomTime -= Time.deltaTime;
 			else if (enemyCount < enemyCap)
 				spawnEnemy ();
+
+			if (Mathf.Floor (difficultyTimer / 60) > bossCount){
+				int x = Random.value > 0.5 ? (int)minX : (int)maxX;
+				int y = Random.value > 0.5 ? (int)minY : (int)maxY;
+				int randx = x > 0 ? 1 : -1;
+				int randy = y > 0 ? 1 : -1;
+				Vector2 spawnPos = new Vector2 (x + Random.Range (5, 11) * randx, y + Random.Range (5, 11) * randy);
+				PhotonNetwork.InstantiateSceneObject ("BossEnemy", spawnPos, transform.rotation, 0, null);
+				bossCount++;
+			}
 		}
 	}
 
