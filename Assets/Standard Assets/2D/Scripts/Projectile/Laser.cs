@@ -29,7 +29,7 @@ public class Laser : Projectile {
 		}
 
 		AudioSource audio = GetComponent<AudioSource> ();
-		audio.Play ();
+		AudioSource.PlayClipAtPoint(audio.clip, new Vector3(0,0,0));
 		
 		Destroy (gameObject, 10);
 		speed = 20;

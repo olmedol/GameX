@@ -5,9 +5,14 @@ public class EnemyHealth : Photon.MonoBehaviour {
 	public int health;
 	private float invulnTime;
 	private float ramCooldown;
+	public AudioClip dead;
+	AudioSource audio;
+	ParticleSystem expl;
 
 	// Use this for initialization
 	void Start () {
+		audio = GetComponent<AudioSource> ();
+		expl = GetComponent<ParticleSystem> ();
 		invulnTime = 1f;
 		ramCooldown = 0f;
 		//gameObject.AddComponent<GainXP>();
@@ -15,9 +20,12 @@ public class EnemyHealth : Photon.MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (health < 1)
+		if (health < 1) {
 			//Destroy (gameObject);
-			PhotonNetwork.Destroy (GetComponent<PhotonView>());
+			AudioSource.PlayClipAtPoint(audio.clip, new Vector3(0,0,0));
+			expl.Play();
+			PhotonNetwork.Destroy (GetComponent<PhotonView> ());
+		}
 		if (ramCooldown > 0)
 			ramCooldown -= Time.deltaTime;
 	}

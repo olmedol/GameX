@@ -21,7 +21,7 @@ public class SniperEnemy : Photon.MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		AudioSource[] audio = GetComponents<AudioSource> ();
-		warmup = audio [0];
+		warmup = audio [2];
 		shot = audio [1];
 
 		speed = 6;

@@ -23,9 +23,12 @@ public class Player : Photon.MonoBehaviour {
 	public bool shield; //shield upgrade active/inactive
 	private float shieldCooldown; //Time until shield regenerates
 	private Transform shield_object;
-	
+	AudioSource audio;
+
 	// Use this for initialization
 	void Start () {
+		audio = GetComponent<AudioSource> ();
+
 		health = 10;
 		maxspeed = 5;
 		maxHealth = 10;
@@ -54,9 +57,11 @@ public class Player : Photon.MonoBehaviour {
 		angle = Mathf.Atan2(mousePos.y, mousePos.x) * Mathf.Rad2Deg;
 		transform.localEulerAngles = new Vector3(0, 0, angle);
 		
-		if (health < 1)
-			PhotonNetwork.Destroy (GetComponent<PhotonView>());
-		
+		if (health < 1) {
+			AudioSource.PlayClipAtPoint(audio.clip, new Vector3(0,0,0));
+			Camera.main.transform.SetParent(null);
+			PhotonNetwork.Destroy (GetComponent<PhotonView> ());
+		}
 		if (damageCooldown > 0)
 			damageCooldown -= Time.deltaTime;
 
