@@ -33,6 +33,10 @@ public class OrbitEnemy : MonoBehaviour {
 				return;
 			}
 
+			Vector2 relativePos = new Vector2 (transform.position.x - target.position.x, transform.position.y - target.position.y);
+			float angle = Mathf.Atan2 (relativePos.y, relativePos.x) * Mathf.Rad2Deg - 90;
+			transform.localEulerAngles = new Vector3 (0, 0, angle);
+
 			if (inRange) {
 				orbitDistance -= Time.deltaTime;
 			} else if (Vector2.Distance (transform.position, target.position) < 10) {

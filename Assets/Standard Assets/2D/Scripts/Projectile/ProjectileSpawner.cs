@@ -18,8 +18,6 @@ public class ProjectileSpawner : Photon.MonoBehaviour {
 	}
 
 	public void SpawnProjectile(bool Enemy){
-
-
 			if (shotCooldown <= 0f) {
 				GameObject p = PhotonNetwork.Instantiate (projectile, transform.position, transform.rotation, 0);
 				p.GetComponent<Projectile> ().setEnemy (Enemy);

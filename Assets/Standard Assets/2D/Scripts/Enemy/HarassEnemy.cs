@@ -7,8 +7,6 @@ public class HarassEnemy : MonoBehaviour {
 	private Transform target;
 	private float firingTime;
 	private float firingPeriod;
-	private Vector2 relativePos;
-	private float angle;
 
 	// Use this for initialization
 	void Start () {
@@ -29,8 +27,8 @@ public class HarassEnemy : MonoBehaviour {
 			}
 
 			direction = (target.position - transform.position).normalized;
-			relativePos = new Vector2 (transform.position.x - target.position.x, transform.position.y - target.position.y);
-			angle = Mathf.Atan2 (relativePos.y, relativePos.x) * Mathf.Rad2Deg + 180;
+			Vector2 relativePos = new Vector2 (transform.position.x - target.position.x, transform.position.y - target.position.y);
+			float angle = Mathf.Atan2 (relativePos.y, relativePos.x) * Mathf.Rad2Deg + 180;
 			transform.localEulerAngles = new Vector3 (0, 0, angle);
 
 			if (firingTime > 0) {

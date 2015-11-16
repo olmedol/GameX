@@ -47,11 +47,14 @@ public class AsteroidSpawn : Photon.MonoBehaviour {
 				print ("Spawn is out of range!");
 				break;
 		}
-		int x = Random.value > 0.5 ? (int) minX : (int) maxX;
-		int y = Random.value > 0.5 ? (int) minY : (int) maxY;
-		int randx = x > 0 ? 1 : -1;
-		int randy = y > 0 ? 1 : -1;
-		Vector2 spawnPos = new Vector2(x + Random.Range (5, 11) * randx, y + Random.Range (5, 11) * randy);
+		bool isx = Random.value > 0.5;
+		int val;
+		if(isx)
+			val = Random.value > 0.5 ? (int) minX : (int) maxX;
+		else
+			val = Random.value > 0.5 ? (int) minY : (int) maxY;
+		int posORneg = val > 0 ? 1 : -1;
+		Vector2 spawnPos = new Vector2((isx ? 1 : 0) * (val + Random.Range (5, 11) * posORneg), (isx ? 0 : 1) * (val + Random.Range (5, 11) * posORneg));
 		PhotonNetwork.InstantiateSceneObject (asteroid, spawnPos, transform.rotation, 0, null);
 	}
 }

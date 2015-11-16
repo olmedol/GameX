@@ -9,16 +9,13 @@ public class GUIManager : MonoBehaviour {
 	private float currentMana = 100.0f;
 	public int maxMana = 100;
 	
-	private float currentStamina = 100.0f;
-	public int maxStamina = 100;
-	
 	private float barLength= 0.0f;
 	
-	private Camera cam;
+	//private Camera cam;
 	
 	void  Start (){
 		barLength = Screen.width / 8;
-		cam = GetComponent<Camera>();
+		//cam = GetComponent<Camera>();
 	}
 	
 	void  Update (){
