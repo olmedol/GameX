@@ -6,6 +6,7 @@ public class EnemyHealth : Photon.MonoBehaviour {
 	private float invulnTime;
 	private float ramCooldown;
 	public AudioClip dead;
+	public ParticleSystem deathParticle; 
 	AudioSource audio;
 	ParticleSystem expl;
 
@@ -21,9 +22,14 @@ public class EnemyHealth : Photon.MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (health < 1) {
+
 			//Destroy (gameObject);
 			AudioSource.PlayClipAtPoint(audio.clip, new Vector3(0,0,0));
 			expl.Play();
+			if(deathParticle!=null){
+				Instantiate ( deathParticle, gameObject.transform.position, gameObject.transform.rotation);
+			}
+			Destroy(deathParticle,2.5f);
 			PhotonNetwork.Destroy (GetComponent<PhotonView> ());
 		}
 		if (ramCooldown > 0)
