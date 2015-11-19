@@ -16,16 +16,12 @@ public class PauseGame : Photon.MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (player == null) {
-			GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
-			for (int i = 0; i < players.Length; i++) {
-				if(players[i].GetComponent<PhotonView>().isMine){
-					player = players[i];
+			foreach(GameObject p in GameObject.FindGameObjectsWithTag("Player"))
+				if(p.GetComponent<PhotonView>().isMine){
+					player = p;
 					break;
 				}
-			}
-			if(player == null){
-				return;
-			}
+			return;
 		}
 	
 
