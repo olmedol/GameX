@@ -21,8 +21,8 @@ public class Player : Photon.MonoBehaviour {
 	public bool laser2; //Side-laser upgrade active/inactive
 	public bool laser3; //More lasers upgrade active/inactive
 	public bool shield; //shield upgrade active/inactive
+	private Shield shield_component;
 	private float shieldCooldown; //Time until shield regenerates
-	private Transform shield_object;
 	AudioSource audio;
 
 	// Use this for initialization
@@ -42,11 +42,7 @@ public class Player : Photon.MonoBehaviour {
 		laser3 = false;
 		shield = false;
 		shieldCooldown = 0;
-		foreach (Transform child in transform)
-			if (child.tag == "Shield")
-				shield_object = child;
-		shield_object.gameObject.SetActive (false);
-
+		shield_component = GetComponent<Shield> ();
 	}
 	
 	// Update is called once per frame
@@ -68,8 +64,8 @@ public class Player : Photon.MonoBehaviour {
 		if (shieldCooldown > 0)
 			shieldCooldown -= Time.deltaTime;
 
-		if (shieldCooldown <= 0 && !shield_object.gameObject.activeSelf && shield)
-			shield_object.gameObject.SetActive (true);
+		if (shieldCooldown <= 0 && !shield_component.shieldActive() && shield)
+			shield_component.shieldActive (true);
 		
 		if (Input.GetButton ("Fire1") && Time.timeScale == 1)
 			GetComponent<ProjectileSpawner>().SpawnProjectile(laser1, laser2, laser3);
@@ -85,9 +81,9 @@ public class Player : Photon.MonoBehaviour {
 		if (damageCooldown > 0)
 			return;
 		Projectile p = otherCollider.gameObject.GetComponent<Projectile> ();
-		if (p != null && p.isEnemy () == true && shield_object.gameObject.activeSelf) {
+		if (p != null && p.isEnemy () == true && shield_component.shieldActive()) {
 
-			shield_object.gameObject.SetActive (false);
+			shield_component.shieldActive(false);
 			shieldCooldown = 10;
 			PhotonNetwork.Destroy (p.GetComponent<PhotonView>());
 			damageCooldown = invulnTime;
@@ -107,14 +103,14 @@ public class Player : Photon.MonoBehaviour {
 	
 	void OnCollisionStay2D(Collision2D otherCollision){
 		if (damageCooldown <= 0 && otherCollision.gameObject.tag != "Player" 
-			&& shield_object.gameObject.activeSelf) {
+		    && shield_component.shieldActive()) {
 			
-			shield_object.gameObject.SetActive (false);
+			shield_component.shieldActive(false);
 			shieldCooldown = 10;
 			damageCooldown = invulnTime;
 		}
 		else if (damageCooldown <= 0 && otherCollision.gameObject.tag != "Player"
-		    && !shield_object.gameObject.activeSelf){
+		         && !shield_component.shieldActive()){
 
 			health -= 1;
 			Component RemoveHealth = GameObject.Find ("Main Camera").GetComponent ("GUIManager");
@@ -125,13 +121,13 @@ public class Player : Photon.MonoBehaviour {
 	}
 	
 	public void damage(int x){
-		if (damageCooldown <= 0 && shield_object.gameObject.activeSelf) {
+		if (damageCooldown <= 0 && shield_component.shieldActive()) {
 			
-			shield_object.gameObject.SetActive (false);
+			shield_component.shieldActive(false);
 			shieldCooldown = 10;
 			damageCooldown = invulnTime;
 		}
-			else if(damageCooldown <= 0 && !shield_object.gameObject.activeSelf){
+		else if(damageCooldown <= 0 && !shield_component.shieldActive()){
 			health -= x;
 			Component RemoveHealth = GameObject.Find ("Main Camera").GetComponent ("GUIManager");
 			RemoveHealth.SendMessage ("AdjustCurrentHealth", -10 * x);
