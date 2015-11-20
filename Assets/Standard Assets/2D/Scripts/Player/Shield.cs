@@ -9,7 +9,7 @@ public class Shield : Photon.MonoBehaviour {
 		foreach (Transform child in transform)
 			if (child.tag == "Shield")
 				shield = child;
-		shieldActive (false);
+		GetComponent<PhotonView>().RPC ("shieldActive", PhotonTargets.All, false);
 	}
 	
 	// Update is called once per frame

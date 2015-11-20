@@ -65,7 +65,7 @@ public class Player : Photon.MonoBehaviour {
 			shieldCooldown -= Time.deltaTime;
 
 		if (shieldCooldown <= 0 && !shield_component.shieldActive() && shield)
-			shield_component.shieldActive (true);
+			shield_component.GetComponent<PhotonView>().RPC ("shieldActive", PhotonTargets.All, true);
 		
 		if (Input.GetButton ("Fire1") && Time.timeScale == 1)
 			GetComponent<ProjectileSpawner>().SpawnProjectile(laser1, laser2, laser3);
@@ -83,7 +83,7 @@ public class Player : Photon.MonoBehaviour {
 		Projectile p = otherCollider.gameObject.GetComponent<Projectile> ();
 		if (p != null && p.isEnemy () == true && shield_component.shieldActive()) {
 
-			shield_component.shieldActive(false);
+			shield_component.GetComponent<PhotonView>().RPC ("shieldActive", PhotonTargets.All, false);
 			shieldCooldown = 10;
 			PhotonNetwork.Destroy (p.GetComponent<PhotonView>());
 			damageCooldown = invulnTime;
@@ -105,7 +105,7 @@ public class Player : Photon.MonoBehaviour {
 		if (damageCooldown <= 0 && otherCollision.gameObject.tag != "Player" 
 		    && shield_component.shieldActive()) {
 			
-			shield_component.shieldActive(false);
+			shield_component.GetComponent<PhotonView>().RPC ("shieldActive", PhotonTargets.All, false);
 			shieldCooldown = 10;
 			damageCooldown = invulnTime;
 		}
@@ -123,7 +123,7 @@ public class Player : Photon.MonoBehaviour {
 	public void damage(int x){
 		if (damageCooldown <= 0 && shield_component.shieldActive()) {
 			
-			shield_component.shieldActive(false);
+			shield_component.GetComponent<PhotonView>().RPC ("shieldActive", PhotonTargets.All, false);
 			shieldCooldown = 10;
 			damageCooldown = invulnTime;
 		}
