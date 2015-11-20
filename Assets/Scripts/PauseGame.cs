@@ -32,14 +32,16 @@ public class PauseGame : Photon.MonoBehaviour {
 
 			if (Input.GetKeyDown ("escape")) {
 
-				Time.timeScale = 0;
+				if(!LoadOnClick.onlineStatus)
+					Time.timeScale = 0;
 				PauseGUI.SetActive (true);
 
 			}
 
 			if (Input.GetKeyDown ("p")) {
 			
-				Time.timeScale = 0;
+				if(!LoadOnClick.onlineStatus)
+					Time.timeScale = 0;
 				PerksMenu.SetActive (true);
 			
 			}
@@ -47,7 +49,7 @@ public class PauseGame : Photon.MonoBehaviour {
 		if(PerksMenu.GetActive()==true){
 
 
-				if (Time.timeScale == 0) {
+				if (Time.timeScale == 0 || LoadOnClick.onlineStatus) {
 					
 					if(Input.GetKeyDown("escape")){
 						
