@@ -21,7 +21,13 @@ public class PauseGame : Photon.MonoBehaviour {
 					player = p;
 					break;
 				}
-			return;
+			if (Input.GetKeyDown ("escape")) {
+				
+				if(!LoadOnClick.onlineStatus)
+					Time.timeScale = 0;
+				PauseGUI.SetActive (true);
+				
+			} return;
 		}
 	
 
