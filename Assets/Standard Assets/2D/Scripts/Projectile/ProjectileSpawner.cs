@@ -17,6 +17,7 @@ public class ProjectileSpawner : Photon.MonoBehaviour {
 			shotCooldown -= Time.deltaTime;
 	}
 
+	//Projectile is spawned matching spawner's rotation and position
 	public void SpawnProjectile(bool Enemy){
 			if (shotCooldown <= 0f) {
 				GameObject p = PhotonNetwork.Instantiate (projectile, transform.position, transform.rotation, 0);
@@ -24,6 +25,8 @@ public class ProjectileSpawner : Photon.MonoBehaviour {
 				shotCooldown = rateOfFire;
 		}
 	}
+
+	//Multi projectile spawning for enemies.
 	public void SpawnProjectile(bool Enemy, float angleOffset, int count){
 			if (shotCooldown <= 0f) {
 				float startAngle = Random.Range (0, 360);
@@ -36,6 +39,7 @@ public class ProjectileSpawner : Photon.MonoBehaviour {
 			}
 	}
 
+	//Multi projectile spawning for players.
 	public void SpawnProjectile(bool laser1, bool laser2, bool laser3){
 		if (shotCooldown <= 0f) {
 

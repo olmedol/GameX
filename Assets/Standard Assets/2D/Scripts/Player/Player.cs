@@ -53,7 +53,7 @@ public class Player : Photon.MonoBehaviour {
 		angle = Mathf.Atan2(mousePos.y, mousePos.x) * Mathf.Rad2Deg;
 		transform.localEulerAngles = new Vector3(0, 0, angle);
 		
-		if (health < 1) {
+		if (health < 1) { //if health is less than one player is destroyed
 			AudioSource.PlayClipAtPoint(audio.clip, new Vector3(0,0,0));
 			Camera.main.transform.SetParent(null);
 			PhotonNetwork.Destroy (GetComponent<PhotonView> ());
@@ -64,33 +64,34 @@ public class Player : Photon.MonoBehaviour {
 		if (shieldCooldown > 0)
 			shieldCooldown -= Time.deltaTime;
 
-		if (shieldCooldown <= 0 && !shield_component.shieldActive() && shield)
+		if (shieldCooldown <= 0 && !shield_component.shieldActive() && shield) //if shield cooldown hits 0 and shield is inactive, activate shield
 			shield_component.GetComponent<PhotonView>().RPC ("shieldActive", PhotonTargets.All, true);
 		
 		if (Input.GetButton ("Fire1") && Time.timeScale == 1)
 			GetComponent<ProjectileSpawner>().SpawnProjectile(laser1, laser2, laser3);
 	}
 	
+	// Update is called once per physics update
 	void FixedUpdate() {
 		Rigidbody2D r = GetComponent<Rigidbody2D> ();
 		r.AddForce (direction * 20);
 		r.velocity = Vector2.ClampMagnitude (r.velocity, maxspeed);
 	}
 	
+	//Function handling projectile interaction
 	void OnTriggerStay2D(Collider2D otherCollider){
-		if (damageCooldown > 0)
+		if (damageCooldown > 0) //Player does not take damage if currently experiencing mercy invulnerability
 			return;
 		Projectile p = otherCollider.gameObject.GetComponent<Projectile> ();
-		if (p != null && p.isEnemy () == true && shield_component.shieldActive()) {
+		if (p != null && p.isEnemy () == true && shield_component.shieldActive()) { //if shield is active, its disabled and no damage is taken
 
 			shield_component.GetComponent<PhotonView>().RPC ("shieldActive", PhotonTargets.All, false);
 			shieldCooldown = 10;
 			PhotonNetwork.Destroy (p.GetComponent<PhotonView>());
 			damageCooldown = invulnTime;
 
-
 		}
-		else if (p != null && p.isEnemy () == true){
+		else if (p != null && p.isEnemy () == true){ //otherwise, player takes damage equal to that of the projectile and it is destroyed
 			health -= p.damageInflicted();
 			
 			Component RemoveHealth = GameObject.Find("Main Camera").GetComponent("GUIManager");
@@ -100,17 +101,18 @@ public class Player : Photon.MonoBehaviour {
 			damageCooldown = invulnTime;
 		}
 	}
-	
+
+	//Function handling collision interaction
 	void OnCollisionStay2D(Collision2D otherCollision){
 		if (damageCooldown <= 0 && otherCollision.gameObject.tag != "Player" 
-		    && shield_component.shieldActive()) {
+		    && shield_component.shieldActive()) { //as above, if shield is active damage is prevented
 			
 			shield_component.GetComponent<PhotonView>().RPC ("shieldActive", PhotonTargets.All, false);
 			shieldCooldown = 10;
 			damageCooldown = invulnTime;
 		}
 		else if (damageCooldown <= 0 && otherCollision.gameObject.tag != "Player"
-		         && !shield_component.shieldActive()){
+		         && !shield_component.shieldActive()){ //player takes 1 damage if it collides with a non-player with shields down
 
 			health -= 1;
 			Component RemoveHealth = GameObject.Find ("Main Camera").GetComponent ("GUIManager");
@@ -135,10 +137,12 @@ public class Player : Photon.MonoBehaviour {
 			damageCooldown = invulnTime;
 		}
 	}
+
 	public void increaseCap(int x){
 		maxHealth += x;
 		health = maxHealth;
 	}
+	/*
 	public void heal(int x){
 		if (health + x >= maxHealth) {
 			health = maxHealth;
@@ -151,7 +155,7 @@ public class Player : Photon.MonoBehaviour {
 		AddHealth.SendMessage ("AdjustCurrentHealth", 10 * x);
 		
 	}
-	
+	*/
 }
 
 

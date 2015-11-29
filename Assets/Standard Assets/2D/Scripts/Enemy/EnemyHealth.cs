@@ -2,9 +2,9 @@
 using System.Collections;
 
 public class EnemyHealth : Photon.MonoBehaviour {
-	public int health;
-	private float invulnTime;
-	private float ramCooldown;
+	public int health; //health of the enemy
+	private float invulnTime; //period of time enemy is invulnerable to further collision damage after colliding
+	private float ramCooldown; //how much invulnTime the enemy has left
 	public AudioClip dead;
 	public ParticleSystem deathParticle; 
 	public Object instanceParticleSystem;
@@ -17,19 +17,15 @@ public class EnemyHealth : Photon.MonoBehaviour {
 		expl = GetComponent<ParticleSystem> ();
 		invulnTime = 1f;
 		ramCooldown = 0f;
-		//gameObject.AddComponent<GainXP>();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		if (health < 1) {
-
-			//Destroy (gameObject);
+		if (health < 1) { //Enemy is destroyed once health < 1
 			AudioSource.PlayClipAtPoint(audio.clip, new Vector3(0,0,0));
 			expl.Play();
-			if(deathParticle!=null){
+			if(deathParticle!=null)
 				instanceParticleSystem= Instantiate ( deathParticle, gameObject.transform.position, gameObject.transform.rotation);
-			}
 			Destroy(instanceParticleSystem,2.5f);
 			PhotonNetwork.Destroy (GetComponent<PhotonView> ());
 		}
@@ -37,18 +33,20 @@ public class EnemyHealth : Photon.MonoBehaviour {
 			ramCooldown -= Time.deltaTime;
 	}
 
+	//Function handling projectile interaction
 	void OnTriggerStay2D(Collider2D otherCollider){
 		Projectile p = otherCollider.gameObject.GetComponent<Projectile> ();
 		PhotonView v = otherCollider.gameObject.GetComponent<PhotonView> ();
-		if (p != null && v != null && p.isEnemy () == false && v.isMine) {
+		if (p != null && v != null && p.isEnemy () == false && v.isMine) { //Only player projectiles are evaluated, and only if owned by you, to prevent duplicate damage events
 			GetComponent<PhotonView>().RPC ("damage", PhotonTargets.AllBufferedViaServer, p.damageInflicted ());
 			PhotonNetwork.Destroy (p.GetComponent<PhotonView>());
 		}
 	}
 
+	//Function handling collision interaction
 	void OnCollisionStay2D(Collision2D otherCollision){
 		GameObject g = otherCollision.gameObject;
-		if(g.GetComponent<RamEnemy>() != null)
+		if(g.GetComponent<RamEnemy>() != null) //The Ramming Enemy is immune to ramming damage
 			return;
 		PhotonView v = g.GetComponent<PhotonView> ();
 		if (g != null && v != null && ramCooldown <= 0 && v.isMine && (g.tag == "Player" || g.tag == "Asteroid")){

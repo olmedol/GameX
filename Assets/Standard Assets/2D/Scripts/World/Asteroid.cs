@@ -2,10 +2,10 @@
 using System.Collections;
 
 public class Asteroid : Photon.MonoBehaviour {
-	private int speed;
-	private Vector2 movement;
-	private float timeToDestroy;
-	private float minX, maxX, minY, maxY;
+	private int speed; //speed of the asteroid
+	private Vector2 movement; //velocity vector
+	private float timeToDestroy; //time outside bounds until asteroid is despawned
+	private float minX, maxX, minY, maxY; //boundary that starts despawning process
 
 	// Use this for initialization
 	void Start () {
@@ -25,17 +25,19 @@ public class Asteroid : Photon.MonoBehaviour {
 				timeToDestroy -= Time.deltaTime;
 			else
 				timeToDestroy = 20f;
-			if(timeToDestroy < 0)
+			if(timeToDestroy <= 0) //Asteroid is destroyed after 20 seconds out of bounds
 				PhotonNetwork.Destroy (GetComponent<PhotonView>());
 		}
 
 	}
 
+	// Update is called once per physics update
 	void FixedUpdate() {
 		if (PhotonNetwork.isMasterClient)
 			GetComponent<Rigidbody2D> ().velocity = movement;
 	}
 
+	//Asteroid simply destroys any projectiles which collide with it
 	void OnTriggerStay2D(Collider2D otherCollider){
 		PhotonNetwork.Destroy (otherCollider.GetComponent<PhotonView>());;
 	}

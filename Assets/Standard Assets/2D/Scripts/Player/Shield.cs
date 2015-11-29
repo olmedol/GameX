@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+//this class is a shell for easier interaction with a player's child shield object
 public class Shield : Photon.MonoBehaviour {
 	private Transform shield;
 

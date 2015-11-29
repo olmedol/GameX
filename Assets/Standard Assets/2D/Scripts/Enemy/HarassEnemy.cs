@@ -2,11 +2,11 @@
 using System.Collections;
 
 public class HarassEnemy : MonoBehaviour {
-	private float maxspeed;
-	private Vector2 direction;
-	private Transform target;
-	private float firingTime;
-	private float firingPeriod;
+	private float maxspeed; //max speed of enemy
+	private Vector2 direction; //direction of acceleration, points directly at target player
+	private Transform target; //the target, which is a random player
+	private float firingTime; //Time until it reevaluates whether it should move or continue firing
+	private float firingPeriod; //How long it spends firing before reevaluating whether it should move or not
 
 	// Use this for initialization
 	void Start () {
@@ -20,7 +20,7 @@ public class HarassEnemy : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (PhotonNetwork.isMasterClient) {
-			if(target == null){
+			if(target == null){ //sets new target if current one is missing (either by destruction or player disconnection)
 				GameObject[] targets = GameObject.FindGameObjectsWithTag ("Player");
 				target = targets[Random.Range (0, targets.Length)].transform;
 				return;
@@ -31,24 +31,25 @@ public class HarassEnemy : MonoBehaviour {
 			float angle = Mathf.Atan2 (relativePos.y, relativePos.x) * Mathf.Rad2Deg + 180;
 			transform.localEulerAngles = new Vector3 (0, 0, angle);
 
-			if (firingTime > 0) {
+			if (firingTime > 0) { //If firingTime > 0, it is in the process of shooting at a player
 				GetComponent<ProjectileSpawner> ().SpawnProjectile (true);
 				firingTime -= Time.deltaTime;
-			} else if (Vector2.Distance (gameObject.transform.position, target.position) < 10) {
+			} else if (Vector2.Distance (gameObject.transform.position, target.position) < 10) { //Once within 10 units, it stops and startes firing
 				maxspeed = 0;
 				firingTime = firingPeriod;
-			} else
+			} else //If firingTime <= 0 and distance > 10, it moves towards its target
 				maxspeed = 15;
 		}
 	}
 
+	// Update is called once per physics update
 	void FixedUpdate() {
 		if (PhotonNetwork.isMasterClient) {
 			if(target == null)
 				return;
 			Rigidbody2D r = GetComponent<Rigidbody2D> ();
 			r.AddForce (direction * 20);
-			r.velocity = Vector2.ClampMagnitude (r.velocity, maxspeed);
+			r.velocity = Vector2.ClampMagnitude (r.velocity, maxspeed); //Ensures enemy cannot exceed maximum speed
 		}
 	}
 	

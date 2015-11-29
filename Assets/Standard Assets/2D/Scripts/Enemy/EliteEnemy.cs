@@ -2,11 +2,11 @@
 using System.Collections;
 
 public class EliteEnemy : MonoBehaviour {
-	private float maxspeed;
-	private Vector2 direction;
-	private Transform target;
-	private Vector2 relativePos;
-	private float angle;
+	private float maxspeed; //max speed of enemy
+	private Vector2 direction; //direction of acceleration, points directly at target player
+	private Transform target; //the target, which is a random player
+	private Vector2 relativePos; //position of target relative to self in absolute terms
+	private float angle; //angle that projectiles are fired at
 
 	// Use this for initialization
 	void Start () {
@@ -18,7 +18,7 @@ public class EliteEnemy : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (PhotonNetwork.isMasterClient) {
-			if(target == null){
+			if(target == null){ //sets new target if current one is missing (either by destruction or player disconnection)
 				GameObject[] targets = GameObject.FindGameObjectsWithTag ("Player");
 				target = targets[Random.Range (0, targets.Length)].transform;
 				return;
@@ -31,15 +31,16 @@ public class EliteEnemy : MonoBehaviour {
 		}
 	}
 
+	// Update is called once per physics update
 	void FixedUpdate() {
 		if (PhotonNetwork.isMasterClient) {
 			if(target == null)
 				return;
 			Rigidbody2D r = GetComponent<Rigidbody2D> ();
-			if(Vector2.Distance (transform.position, target.position) < 20)
+			if(Vector2.Distance (transform.position, target.position) < 20) //Limits enemy to only firing within 20 units of the player
 				GetComponent<ProjectileSpawner> ().SpawnProjectile (true);
 			r.AddForce (direction * 10);
-			r.velocity = Vector2.ClampMagnitude (r.velocity, maxspeed);
+			r.velocity = Vector2.ClampMagnitude (r.velocity, maxspeed); //Ensures enemy cannot exceed maxspeed
 		}
 	}
 }
