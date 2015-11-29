@@ -33,9 +33,9 @@ public class PauseGame : Photon.MonoBehaviour {
 
 		Points.text = player.GetComponent<Perks> ().perkPoints.ToString ();
 
-			//Points.text (player.GetComponent<Perks>().perkPoints.ToString ());
+		//Check to see if the game is paused
 		if (Time.timeScale == 1) {
-
+			//Enable pause menu
 			if (Input.GetKeyDown ("escape")) {
 
 				if(!LoadOnClick.onlineStatus)
@@ -43,7 +43,7 @@ public class PauseGame : Photon.MonoBehaviour {
 				PauseGUI.SetActive (true);
 
 			}
-
+			//Enable perks menu
 			if (Input.GetKeyDown ("p")) {
 			
 				if(!LoadOnClick.onlineStatus)
@@ -54,7 +54,7 @@ public class PauseGame : Photon.MonoBehaviour {
 		}
 		if(PerksMenu.GetActive()==true){
 
-
+				//Exit from perks menu
 				if (Time.timeScale == 0 || LoadOnClick.onlineStatus) {
 					
 					if(Input.GetKeyDown("escape")){
